@@ -1,4 +1,7 @@
-package ua.com.juja.sqlcmd;
+package ua.com.juja.sqlcmd.model;
+
+import ua.com.juja.sqlcmd.model.DataSet;
+import ua.com.juja.sqlcmd.model.DatabaseManager;
 
 import java.sql.*;
 import java.util.Random;
@@ -20,12 +23,13 @@ public class Main {
         DatabaseManager dbManager = new DatabaseManager();
         dbManager.connect("sqlcmd", "postgres", "postgres");
         System.out.println(dbManager.getTableNames().toString());
-        dbManager.showTable("users");
+        test(dbManager);
+//        dbManager.showTable("users");
 
 
     }
 
-    public static void test() throws ClassNotFoundException, SQLException {
+    public static void test(DatabaseManager dbManager) throws ClassNotFoundException, SQLException {
 
 
         //connect to db
@@ -45,13 +49,20 @@ public class Main {
         String userName = "user" + i;
         String userPass = "pass" + i;
 
-        String sql = "INSERT INTO users (name, password) "
-                + "VALUES ('" + userName + "', '" + userPass + "');";
-        stmt.executeUpdate(sql);
+//        String sql = "INSERT INTO users (name, password) "
+//                + "VALUES ('" + userName + "', '" + userPass + "');";
+//        stmt.executeUpdate(sql);
+        DataSet dataSet = new DataSet();
+        dataSet.add("name", userName);
+        dataSet.add("password", userPass);
+        dataSet.add("id", 99);
+
+        dbManager.insertRow("users", dataSet);
+
 
 
         //delete
-        sql = "DELETE FROM users WHERE id=5;";
+        String sql = "DELETE FROM users WHERE id=5;";
         stmt.executeUpdate(sql);
 
         //update

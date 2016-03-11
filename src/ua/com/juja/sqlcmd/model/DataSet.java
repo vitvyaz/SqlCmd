@@ -1,4 +1,4 @@
-package ua.com.juja.sqlcmd;
+package ua.com.juja.sqlcmd.model;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -28,9 +28,6 @@ public class DataSet {
 
     private ArrayList<Data> datas = new ArrayList<>();
 
-    public DataSet() {
-
-    }
 
     public void add(String name, Object value) {
         datas.add(new Data(name, value));
@@ -71,6 +68,14 @@ public class DataSet {
             result.add(datas.get(i).getValue());
         }
         return result;
+    }
+
+    public String getName (int i) {
+        return datas.get(i).getName();
+    }
+
+    public Object getValue (int i) {
+        return datas.get(i).getValue();
     }
 
     public int size() {

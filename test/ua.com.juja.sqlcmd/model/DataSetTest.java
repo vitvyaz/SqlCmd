@@ -1,6 +1,7 @@
-package ua.com.juja.sqlcmd;
+package ua.com.juja.sqlcmd.model;
 
 import org.junit.Test;
+import ua.com.juja.sqlcmd.model.DataSet;
 
 import static org.junit.Assert.assertEquals;
 

@@ -1,4 +1,4 @@
-package ua.com.juja.sqlcmd;
+package ua.com.juja.sqlcmd.model;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ public class DatabaseManager {
         return result;
     }
 
-    public ArrayList<DataSet> getTableData(String sql) {
+    public ArrayList<DataSet> getQueryData(String sql) {
         ArrayList<DataSet> tableData = new ArrayList<>();
         try {
             Statement stmt = connection.createStatement();
@@ -71,26 +71,7 @@ public class DatabaseManager {
         return tableData;
     }
 
-    public void showTable(String tableName) {
-        String sql = "SELECT * FROM " + tableName;
-        showQuery(tableName, sql);
-    }
-
-    public void showQuery(String tableName, String sql) {
-        ArrayList<DataSet> tableData = getTableData(sql);
-        if (tableData.size() == 0) {
-            System.out.println("Table "+ tableName + " is empty!");
-            return;
-        }
-        DataSet dataSet = tableData.get(0);
-        String format = "%15s|";
-        System.out.println(dataSet.getNamesFormated(format));
-        for (int i = 0; i < tableData.size(); i++) {
-            System.out.println(tableData.get(i).getValuesFormated(format));
-        }
-    }
-
-    public boolean isTableExist (String tableName) {
+    public boolean isTableExist(String tableName) {
         ArrayList<String> tableNames = getTableNames();
         for (String item : tableNames) {
             if (item.equals(tableName)) {
@@ -100,9 +81,38 @@ public class DatabaseManager {
         return false;
     }
 
-    public void showTable(String tableName, int limit, int offset) {
-        String sql = "SELECT * FROM " + tableName + " ORDER BY id LIMIT " + limit + " OFFSET "+ offset;// сделать запрос
-        showQuery(tableName, sql);
+    public void execQuery(String sql) {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate(sql);
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Ошибка sql query: " + sql);
+            e.printStackTrace();
+        }
+    }
+
+    public void insertRow(String tableName, DataSet dataSet) {
+        String sql = "INSERT INTO " + tableName + " (" + dataSet.getNamesFormated("%s ,") + ") "
+                + "VALUES (" + dataSet.getValuesFormated("'%s' ,") + ")";
+        execQuery(sql);
+    }
+
+    public void updateQuery(String tableName, DataSet dataToChange, DataSet condition) {
+        String dataToUpdate = " SET (" + dataToChange.getNamesFormated(" %s,") + ") = "
+                + "(" + dataToChange.getValuesFormated(" '%s',") + ")";
+
+        String conditionToUpdate = "";
+        if (condition.size() > 0) {
+            conditionToUpdate = " WHERE " + condition.getName(0) + " = '" + condition.getValue(0) + "'";
+        }
+        for (int i = 1; i < condition.size(); i++) {
+            conditionToUpdate += " AND " + condition.getName(i) + " = '" + condition.getValue(i) + "'";
+        }
+
+        String sql = "UPDATE " + tableName + dataToUpdate + conditionToUpdate;
+        System.out.println("Запрос на апдейт:" + sql);
+        execQuery(sql);
     }
 }
 
