@@ -1,6 +1,6 @@
 package ua.com.juja.sqlcmd.controller;
 
-import ua.com.juja.sqlcmd.model.DatabaseManager;
+import ua.com.juja.sqlcmd.model.JDBCPosgreManager;
 import ua.com.juja.sqlcmd.view.Console;
 import ua.com.juja.sqlcmd.view.View;
 
@@ -9,7 +9,7 @@ import ua.com.juja.sqlcmd.view.View;
  */
 public class Main {
     public static void main(String[] args) {
-        DatabaseManager dbManager = new DatabaseManager();
+        JDBCPosgreManager dbManager = new JDBCPosgreManager();
         View view = new Console();
 
         MainController controller = new MainController(dbManager, view);

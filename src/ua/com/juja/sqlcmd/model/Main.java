@@ -1,8 +1,5 @@
 package ua.com.juja.sqlcmd.model;
 
-import ua.com.juja.sqlcmd.model.DataSet;
-import ua.com.juja.sqlcmd.model.DatabaseManager;
-
 import java.sql.*;
 import java.util.Random;
 import java.util.Scanner;
@@ -14,13 +11,9 @@ public class Main {
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         Scanner in = new Scanner(System.in);
-        String dbName = "";
-        String user = "";
 
 
-
-
-        DatabaseManager dbManager = new DatabaseManager();
+        DatabaseManager dbManager = new JDBCPosgreManager();
         dbManager.connect("sqlcmd", "postgres", "postgres");
         System.out.println(dbManager.getTableNames().toString());
         test(dbManager);

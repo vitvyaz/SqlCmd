@@ -1,7 +1,7 @@
 package ua.com.juja.sqlcmd.controller;
 
 import ua.com.juja.sqlcmd.model.DataSet;
-import ua.com.juja.sqlcmd.model.DatabaseManager;
+import ua.com.juja.sqlcmd.model.JDBCPosgreManager;
 import ua.com.juja.sqlcmd.view.View;
 
 import java.util.ArrayList;
@@ -11,9 +11,9 @@ import java.util.ArrayList;
  */
 public class MainController {
     private View view;
-    private DatabaseManager dbManager;
+    private JDBCPosgreManager dbManager;
 
-    public MainController(DatabaseManager dbManager, View view) {
+    public MainController(JDBCPosgreManager dbManager, View view) {
         this.view = view;
         this.dbManager = dbManager;
     }
@@ -33,7 +33,10 @@ public class MainController {
                     view.write(dbManager.getTableNames().toString());
                     break;
                 case "find":
-                    showTable(arrayCommand);
+                    doFind(arrayCommand);
+                    break;
+                case "help":
+                    doHelp();
                     break;
                 default:
                     view.write("Введите правильно команду. (help - вывод списка команд)");
@@ -42,7 +45,25 @@ public class MainController {
         }
     }
 
-    private void showTable(String[] arrrayCommand) {
+    private void doHelp() {
+        view.write("Существующие команды:");
+        view.write("\thelp");
+        view.write("\t\tвывести список команд");
+        view.write("\tlist");
+        view.write("\t\tвывести список таблиц");
+        view.write("\tfind tableName [LIMIT OFFET] ");
+        view.write("\t\tвывести содержимое таблицы [LIMIT - количество строк OFFSET - начальная строка]");
+        view.write("\texit");
+        view.write("\t\tвыход из программы");
+    }
+
+    private void doFind(String[] arrrayCommand) {
+        // TODO печать заголовка как реализована ?
+        if (arrrayCommand.length < 2) {
+            view.write("Не введено имя таблицы");
+            return;
+        }
+
         String tableName = arrrayCommand[1];
         if (!dbManager.isTableExist(tableName)){
             view.write("Нет такой таблицы. Доступны таблицы:");
@@ -51,6 +72,7 @@ public class MainController {
         }
 
         if (arrrayCommand.length == 2) {
+            printHeaderOfTable(tableName);
             String sql = "SELECT * FROM " + tableName;
             showQuery(tableName, sql);
         } else if (arrrayCommand.length == 4) {
@@ -59,6 +81,11 @@ public class MainController {
             String sql = "SELECT * FROM " + tableName + " ORDER BY id LIMIT " + limit + " OFFSET "+ offset;
             showQuery(tableName, sql);
         }
+    }
+
+    private void printHeaderOfTable(String tableName) {
+        String sql = "SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS where table_name = " + tableName;
+
     }
 
     public void connectDB() {

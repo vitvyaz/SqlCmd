@@ -10,20 +10,20 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by Vitalii Viazovoi on 01.03.2016.
  */
-public class DatabaseManagerTest {
+public class JDBCPosgreManagerTest {
 
-    private DatabaseManager dbManager;
+    private JDBCPosgreManager dbManager;
 
     @Before
     public void setup() {
-        dbManager = new DatabaseManager();
+        dbManager = new JDBCPosgreManager();
         dbManager.connect("sqlcmd", "postgres", "postgres");
     }
 
 
     @Test
     public void testGetAllTableNames() {
-        assertEquals("[users, test]",dbManager.getTableNames().toString());
+        assertEquals("[test, users]",dbManager.getTableNames().toString());
     }
 
     @Test
