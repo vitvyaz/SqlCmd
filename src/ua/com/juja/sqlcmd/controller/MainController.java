@@ -58,7 +58,6 @@ public class MainController {
     }
 
     private void doFind(String[] arrrayCommand) {
-        // TODO печать заголовка как реализована ?
         if (arrrayCommand.length < 2) {
             view.write("Не введено имя таблицы");
             return;
@@ -72,20 +71,36 @@ public class MainController {
         }
 
         if (arrrayCommand.length == 2) {
-            printHeaderOfTable(tableName);
             String sql = "SELECT * FROM " + tableName;
-            showQuery(tableName, sql);
+            showTable(tableName, sql);
         } else if (arrrayCommand.length == 4) {
             int limit = Integer.valueOf(arrrayCommand[2]);
             int offset = Integer.valueOf(arrrayCommand[3]);
             String sql = "SELECT * FROM " + tableName + " ORDER BY id LIMIT " + limit + " OFFSET "+ offset;
-            showQuery(tableName, sql);
+            showTable(tableName, sql);
         }
     }
 
-    private void printHeaderOfTable(String tableName) {
-        String sql = "SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS where table_name = " + tableName;
+    private String repeatString(String s, int times) {
+        StringBuffer stringBuffer = new StringBuffer();
+        for (int i = 0; i < times; i++) {
+            stringBuffer.append(s);
+        }
+        return stringBuffer.toString();
+    }
 
+    private void printHeaderOfTable(String tableName, int fieldLength) {
+        ArrayList<String> tableColumns = dbManager.getTableColumn(tableName);
+        int rowLength = (fieldLength + 1) * tableColumns.size() + 1;
+
+        view.write(repeatString("-", rowLength));
+        String format = "%" + fieldLength + "s|";
+        String s = "|";
+        for (int i = 0; i < tableColumns.size(); i++) {
+            s += String.format(format, tableColumns.get(i));
+        }
+        view.write(s);
+        view.write(repeatString("-", rowLength));
     }
 
     public void connectDB() {
@@ -109,17 +124,14 @@ public class MainController {
         view.write("Подключение к базе данных выполнено");
     }
 
-    public void showQuery(String tableName, String sql) {
+    public void showTable(String tableName, String sql) {
         ArrayList<DataSet> tableData = dbManager.getQueryData(sql);
-        if (tableData.size() == 0) {
-            view.write("Нет строк для вывода!");
-            return;
-        }
-        DataSet dataSet = tableData.get(0);
+        int fieldLength = 15;
         String format = "%15s|";
-        view.write(dataSet.getNamesFormated(format));
+
+        printHeaderOfTable(tableName, fieldLength);
         for (int i = 0; i < tableData.size(); i++) {
-            view.write(tableData.get(i).getValuesFormated(format));
+            view.write("|"+tableData.get(i).getValuesFormated(format)+"|");
         }
     }
 

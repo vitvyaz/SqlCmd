@@ -7,7 +7,6 @@ import java.util.ArrayList;
  * Created by Vitalii Viazovoi on 22.02.2016.
  */
 public class JDBCPosgreManager implements DatabaseManager {
-//TODO сделать интерфейс
 //TODO убрать System.out.println при эксепшенах
     private Connection connection;
 
@@ -118,6 +117,25 @@ public class JDBCPosgreManager implements DatabaseManager {
 
         String sql = "UPDATE " + tableName + dataToUpdate + conditionToUpdate;
         execQuery(sql);
+    }
+
+    @Override
+    public ArrayList<String> getTableColumn(String tableName) {
+        ArrayList<String> result = new ArrayList<>();
+        String sql = "SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS where table_name = '" + tableName + "'";
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                result.add(rs.getString(1));
+            }
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Ошибка sql query: " + sql);
+            e.printStackTrace();
+        }
+        return result;
     }
 }
 
