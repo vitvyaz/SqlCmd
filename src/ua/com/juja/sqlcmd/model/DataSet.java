@@ -82,6 +82,37 @@ public class DataSet {
         return datas.size();
     }
 
+    public String getTable() {
+        if (datas.size() == 0) {
+            return "";
+        }
+        StringBuffer names = new StringBuffer();
+        StringBuffer values = new StringBuffer();
+        for (int i = 0; i < datas.size(); i++) {
+            int maxLength = Math.max(getName(i).length(), getValue(i).toString().length());
+            String format = "| %" + maxLength + "s ";
+            names.append(String.format(format, getName(i)));
+            values.append(String.format(format, getValue(i)));
+        }
+        names.append("|");
+        values.append("|");
+        String lineString = repeatString("-", names.length());
+        String result = lineString + "\n" +
+                names.toString() + "\n"+
+                lineString + "\n" +
+                values.toString() + "\n" +
+                lineString;
+        return result;
+    }
+
+    private String repeatString(String s, int times) {
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i < times; i++) {
+            result.append(s);
+        }
+        return result.toString();
+    }
+
 
 
 

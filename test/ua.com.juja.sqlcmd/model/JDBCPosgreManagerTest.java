@@ -48,7 +48,7 @@ public class JDBCPosgreManagerTest {
 
         dbManager.updateQuery("users", dataToUpdate, condition);
 
-        ArrayList<DataSet> users = dbManager.getQueryData("SELECT * FROM users");
+        ArrayList<DataSet> users = dbManager.getTableData("users");
         DataSet user = users.get(0);
         assertEquals("[name, password, id]", user.getNames().toString());
         assertEquals("[StivenPupkin, PupkinPassword, 13]", user.getValues().toString());
@@ -68,7 +68,7 @@ public class JDBCPosgreManagerTest {
         dbManager.insertRow("users", input);
 
         // then
-        ArrayList<DataSet> users = dbManager.getQueryData("SELECT * FROM users");
+        ArrayList<DataSet> users = dbManager.getTableData("users");
         assertEquals(1, users.size());
 
         DataSet user = users.get(0);
@@ -83,7 +83,7 @@ public class JDBCPosgreManagerTest {
             dbManager.insertRow("users", input);
         }
 
-        users = dbManager.getQueryData("SELECT * FROM users");
+        users = dbManager.getTableData("users");;
         assertEquals(13, users.size());
 
     }

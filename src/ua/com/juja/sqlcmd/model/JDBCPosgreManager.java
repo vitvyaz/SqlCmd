@@ -7,7 +7,6 @@ import java.util.ArrayList;
  * Created by Vitalii Viazovoi on 22.02.2016.
  */
 public class JDBCPosgreManager implements DatabaseManager {
-//TODO убрать System.out.println при эксепшенах
     private Connection connection;
 
     public Connection getConnection() {
@@ -19,16 +18,14 @@ public class JDBCPosgreManager implements DatabaseManager {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            System.out.println("You should add JDBC lib: org.postgresql");
+            throw new RuntimeException("You should add JDBC lib: org.postgresql", e);
         }
         try {
             connection = DriverManager.getConnection(
                     "jdbc:postgresql://localhost:5432/" + dataBase, user, password);
         } catch (SQLException e) {
-            System.out.println("Не удается подключиться к базе данных: " + dataBase + " имя пользователя: " + user);
-            System.out.println(("Проверьте правильность имени базы данных, пользователя и пароля"));
             connection = null;
+            throw new RuntimeException("Не удается подключиться к базе данных: " + dataBase + " имя пользователя: " + user, e);
         }
     }
 
@@ -51,8 +48,7 @@ public class JDBCPosgreManager implements DatabaseManager {
         return result;
     }
 
-    @Override
-    public ArrayList<DataSet> getQueryData(String sql) {
+    private ArrayList<DataSet> getQueryData(String sql) {
         ArrayList<DataSet> tableData = new ArrayList<>();
         try {
             Statement stmt = connection.createStatement();
@@ -134,6 +130,29 @@ public class JDBCPosgreManager implements DatabaseManager {
         } catch (SQLException e) {
             System.out.println("Ошибка sql query: " + sql);
             e.printStackTrace();
+        }
+        return result;
+    }
+
+    @Override
+    public ArrayList<DataSet> getTableData(String tableName) {
+        String sql = "SELECT * FROM " + tableName;
+        return getQueryData(sql);
+    }
+
+    @Override
+    public ArrayList<DataSet> getTableData(String tableName, int limit, int offset) {
+        String sql = "SELECT * FROM " + tableName + " ORDER BY id LIMIT " + limit + " OFFSET " + offset;
+        return getQueryData(sql);
+    }
+
+    @Override
+    public DataSet getRow(String tableName, int rowId) {
+        DataSet result = new DataSet();
+        String sql = "SELECT * FROM " + tableName + " WHERE id=" + rowId;
+        ArrayList<DataSet> queryData = getQueryData(sql);
+        if (queryData.size() != 0) {
+            result = queryData.get(0);
         }
         return result;
     }

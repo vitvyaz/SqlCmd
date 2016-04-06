@@ -35,6 +35,9 @@ public class MainController {
                 case "find":
                     doFind(arrayCommand);
                     break;
+                case "update":
+                    doUpdate(arrayCommand);
+                    break;
                 case "help":
                     doHelp();
                     break;
@@ -45,6 +48,32 @@ public class MainController {
         }
     }
 
+    private void doUpdate(String[] arrayCommand) {
+        if (arrayCommand.length != 3) {
+            view.write("Неправильное количество параметров для команды update. Должно быть 3");
+            return;
+        }
+        String tableName = arrayCommand[1];
+        if (!isTableExist(tableName)) {
+            return;
+        }
+        int rowId = Integer.valueOf(arrayCommand[2]);
+//        try {
+//            rowId =  Integer.valueOf(arrayCommand[2]);
+//        }
+//        catch (NumberFormatException e) {
+//            view.write("Ошибка! ID должно быть целым числом.");
+//        }
+
+        //Вывести строку к изменению
+        DataSet rowData = dbManager.getRow(tableName, rowId);
+        view.write(rowData.getTable());
+        view.write("Введите данные к изменению в формате: field1 newValue1 field2 newValue2 ... ");
+        //считать данные
+        //проверить кол-во параметров на четность
+        //дернуть DatabaseManager на апдейт строки
+    }
+
     private void doHelp() {
         view.write("Существующие команды:");
         view.write("\thelp");
@@ -53,40 +82,49 @@ public class MainController {
         view.write("\t\tвывести список таблиц");
         view.write("\tfind tableName [LIMIT OFFET] ");
         view.write("\t\tвывести содержимое таблицы [LIMIT - количество строк OFFSET - начальная строка]");
+        view.write("\tupdate tableName ID");
+        view.write("\t\tизменить строку таблицы tableName (ID - идентификатор строки)");
         view.write("\texit");
         view.write("\t\tвыход из программы");
     }
 
-    private void doFind(String[] arrrayCommand) {
-        if (arrrayCommand.length < 2) {
+    private void doFind(String[] arrayCommand) {
+        if (arrayCommand.length < 2) {
             view.write("Не введено имя таблицы");
             return;
         }
 
-        String tableName = arrrayCommand[1];
-        if (!dbManager.isTableExist(tableName)){
-            view.write("Нет такой таблицы. Доступны таблицы:");
-            view.write(dbManager.getTableNames().toString());
+        String tableName = arrayCommand[1];
+        if (!isTableExist(tableName)) {
             return;
         }
-
-        if (arrrayCommand.length == 2) {
-            String sql = "SELECT * FROM " + tableName;
-            showTable(tableName, sql);
-        } else if (arrrayCommand.length == 4) {
-            int limit = Integer.valueOf(arrrayCommand[2]);
-            int offset = Integer.valueOf(arrrayCommand[3]);
-            String sql = "SELECT * FROM " + tableName + " ORDER BY id LIMIT " + limit + " OFFSET "+ offset;
-            showTable(tableName, sql);
+        ArrayList<DataSet> tableData;
+        if (arrayCommand.length == 2) {
+            tableData = dbManager.getTableData(tableName);
+            showTable(tableName, tableData);
+        } else if (arrayCommand.length == 4) {
+            int limit = Integer.valueOf(arrayCommand[2]);
+            int offset = Integer.valueOf(arrayCommand[3]);
+            tableData = dbManager.getTableData(tableName, limit, offset);
+            showTable(tableName, tableData);
         }
     }
 
-    private String repeatString(String s, int times) {
-        StringBuffer stringBuffer = new StringBuffer();
-        for (int i = 0; i < times; i++) {
-            stringBuffer.append(s);
+    private boolean isTableExist(String tableName) {
+        if (!dbManager.isTableExist(tableName)){
+            view.write("Нет такой таблицы. Доступны таблицы:");
+            view.write(dbManager.getTableNames().toString());
+            return false;
         }
-        return stringBuffer.toString();
+        return true;
+    }
+
+    private String repeatString(String s, int times) {
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i < times; i++) {
+            result.append(s);
+        }
+        return result.toString();
     }
 
     private void printHeaderOfTable(String tableName, int fieldLength) {
@@ -111,7 +149,12 @@ public class MainController {
             String userName = view.read();
             view.write("Введите пароль: ");
             String userPass = view.read();
-            dbManager.connect(dbName, userName, userPass);
+            try {
+                dbManager.connect(dbName, userName, userPass);
+            }
+            catch (Exception e) {
+                printError(e);
+            }
             if (dbManager.getConnection() == null) {
                 view.write("Повторить попытку? (yes/no):");
                 String input = view.read();
@@ -124,9 +167,17 @@ public class MainController {
         view.write("Подключение к базе данных выполнено");
     }
 
-    public void showTable(String tableName, String sql) {
-        ArrayList<DataSet> tableData = dbManager.getQueryData(sql);
-        int fieldLength = 15;
+    private void printError(Exception e) {
+        String message = e.getMessage();
+        Throwable cause = e.getCause();
+        if (cause != null) {
+            message += " " +cause.getMessage();
+        }
+        view.write("Ошибка подключения к БД: " + message);
+    }
+
+    public void showTable(String tableName, ArrayList<DataSet> tableData) {
+        int fieldLength = 15; //TODO посчитать длины в каждой колонке
         String format = "%15s|";
 
         printHeaderOfTable(tableName, fieldLength);
