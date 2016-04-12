@@ -22,4 +22,6 @@ public interface DatabaseManager {
 
     DataSet getRow(String tableName, String rowId);
 
+    boolean isTableExist(String tableName);
+
 }

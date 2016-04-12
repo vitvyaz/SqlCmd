@@ -70,6 +70,7 @@ public class JDBCPosgreManager implements DatabaseManager {
         return tableData;
     }
 
+    @Override
     public boolean isTableExist(String tableName) {
         ArrayList<String> tableNames = getTableNames();
         for (String item : tableNames) {

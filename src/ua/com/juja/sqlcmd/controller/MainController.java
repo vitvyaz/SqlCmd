@@ -1,5 +1,9 @@
 package ua.com.juja.sqlcmd.controller;
 
+import ua.com.juja.sqlcmd.controller.command.Command;
+import ua.com.juja.sqlcmd.controller.command.Exit;
+import ua.com.juja.sqlcmd.controller.command.Find;
+import ua.com.juja.sqlcmd.controller.command.List;
 import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.JDBCPosgreManager;
 import ua.com.juja.sqlcmd.view.View;
@@ -10,12 +14,18 @@ import java.util.ArrayList;
  * Created by Vitalii Viazovoi on 22.02.2016.
  */
 public class MainController {
+    private Command[] commands;
     private View view;
     private JDBCPosgreManager dbManager;
 
     public MainController(JDBCPosgreManager dbManager, View view) {
         this.view = view;
         this.dbManager = dbManager;
+        commands = new Command[] {
+                new Exit(view),
+                new List(view, dbManager),
+                new Find(view, dbManager)
+        };
     }
 
     public void run() {
@@ -27,13 +37,13 @@ public class MainController {
             String[] arrayCommand = command.split(" ");
             switch (arrayCommand[0]) {
                 case "exit":
-                    view.write("До свидания!");
-                    return;
+                    commands[0].process(arrayCommand);
+                    break;
                 case "list":
-                    view.write(dbManager.getTableNames().toString());
+                    commands[1].process(arrayCommand);
                     break;
                 case "find":
-                    doFind(arrayCommand);
+                    commands[2].process(arrayCommand);
                     break;
                 case "update":
                     doUpdate(arrayCommand);
@@ -55,7 +65,7 @@ public class MainController {
         }
 
         String tableName = arrayCommand[1];
-        if (!isTableExist(tableName)) {
+        if (!dbManager.isTableExist(tableName)) {
             view.write("Нет такой таблицы");
             return;
         }
@@ -103,59 +113,6 @@ public class MainController {
         view.write("\t\tвыход из программы");
     }
 
-    private void doFind(String[] arrayCommand) {
-        if (arrayCommand.length < 2) {
-            view.write("Не введено имя таблицы");
-            return;
-        }
-
-        String tableName = arrayCommand[1];
-        if (!isTableExist(tableName)) {
-            return;
-        }
-        ArrayList<DataSet> tableData;
-        if (arrayCommand.length == 2) {
-            tableData = dbManager.getTableData(tableName);
-            showTable(tableName, tableData);
-        } else if (arrayCommand.length == 4) {
-            int limit = Integer.valueOf(arrayCommand[2]);
-            int offset = Integer.valueOf(arrayCommand[3]);
-            tableData = dbManager.getTableData(tableName, limit, offset);
-            showTable(tableName, tableData);
-        }
-    }
-
-    private boolean isTableExist(String tableName) {
-        if (!dbManager.isTableExist(tableName)) {
-            view.write("Нет такой таблицы. Доступны таблицы:");
-            view.write(dbManager.getTableNames().toString());
-            return false;
-        }
-        return true;
-    }
-
-    private String repeatString(String s, int times) {
-        StringBuffer result = new StringBuffer();
-        for (int i = 0; i < times; i++) {
-            result.append(s);
-        }
-        return result.toString();
-    }
-
-    private void printHeaderOfTable(String tableName, int fieldLength) {
-        ArrayList<String> tableColumns = dbManager.getTableColumns(tableName);
-        int rowLength = (fieldLength + 1) * tableColumns.size() + 1;
-
-        view.write(repeatString("-", rowLength));
-        String format = "%" + fieldLength + "s|";
-        String s = "|";
-        for (int i = 0; i < tableColumns.size(); i++) {
-            s += String.format(format, tableColumns.get(i));
-        }
-        view.write(s);
-        view.write(repeatString("-", rowLength));
-    }
-
     public void connectDB() {
         while (dbManager.getConnection() == null) {
             view.write("Введите название базы данных(sqlcmd): ");
@@ -190,14 +147,5 @@ public class MainController {
         view.write("Ошибка подключения к БД: " + message);
     }
 
-    public void showTable(String tableName, ArrayList<DataSet> tableData) {
-        int fieldLength = 15; //TODO посчитать длины в каждой колонке
-        String format = "%15s|";
-
-        printHeaderOfTable(tableName, fieldLength);
-        for (int i = 0; i < tableData.size(); i++) {
-            view.write("|" + tableData.get(i).getValuesFormated(format) + "|");
-        }
-    }
 
 }
