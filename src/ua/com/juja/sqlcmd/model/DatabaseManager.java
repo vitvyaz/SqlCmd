@@ -14,12 +14,12 @@ public interface DatabaseManager {
 
     void updateQuery(String tableName, DataSet dataToChange, DataSet condition);
 
-    ArrayList<String> getTableColumn(String tableName);
+    ArrayList<String> getTableColumns(String tableName);
 
     ArrayList<DataSet> getTableData(String tableName);
 
     ArrayList<DataSet> getTableData(String tableName, int limit, int offset);
 
-    DataSet getRow(String tableName, int rowId);
+    DataSet getRow(String tableName, String rowId);
 
 }

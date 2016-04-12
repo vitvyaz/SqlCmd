@@ -23,7 +23,7 @@ public class MainController {
         while (true) {
             view.write("Введите команду:");
             String command = view.read();
-            command = command.replaceAll("\\s+"," ");
+            command = command.replaceAll("\\s+", " ");
             String[] arrayCommand = command.split(" ");
             switch (arrayCommand[0]) {
                 case "exit":
@@ -53,25 +53,40 @@ public class MainController {
             view.write("Неправильное количество параметров для команды update. Должно быть 3");
             return;
         }
+
         String tableName = arrayCommand[1];
         if (!isTableExist(tableName)) {
+            view.write("Нет такой таблицы");
             return;
         }
-        int rowId = Integer.valueOf(arrayCommand[2]);
-//        try {
-//            rowId =  Integer.valueOf(arrayCommand[2]);
-//        }
-//        catch (NumberFormatException e) {
-//            view.write("Ошибка! ID должно быть целым числом.");
-//        }
 
-        //Вывести строку к изменению
+        String rowId = arrayCommand[2];
         DataSet rowData = dbManager.getRow(tableName, rowId);
+        if (rowData.size() == 0) {
+            view.write("В таблице " + tableName + "нет строки с id: " + rowId);
+            return;
+        }
+
         view.write(rowData.getTable());
         view.write("Введите данные к изменению в формате: field1 newValue1 field2 newValue2 ... ");
-        //считать данные
-        //проверить кол-во параметров на четность
-        //дернуть DatabaseManager на апдейт строки
+        String fieldsValues = view.read();
+        fieldsValues = fieldsValues.replaceAll("\\s+", " ");
+        String[] arrayFieldValues = fieldsValues.split(" ");
+
+        if (arrayFieldValues.length % 2 == 1) {
+            view.write("Ошибка! Нечетное количество параметров");
+            return;
+        }
+
+        DataSet dataToChange = new DataSet();
+        for (int i = 0; i < arrayFieldValues.length; i += 2) {
+            dataToChange.add(arrayFieldValues[i], arrayFieldValues[i + 1]);
+        }
+        DataSet condition = new DataSet();
+        condition.add("id", rowId);
+        dbManager.updateQuery(tableName, dataToChange, condition);
+        view.write("Измененая строка");
+        view.write(rowData.getTable());
     }
 
     private void doHelp() {
@@ -111,7 +126,7 @@ public class MainController {
     }
 
     private boolean isTableExist(String tableName) {
-        if (!dbManager.isTableExist(tableName)){
+        if (!dbManager.isTableExist(tableName)) {
             view.write("Нет такой таблицы. Доступны таблицы:");
             view.write(dbManager.getTableNames().toString());
             return false;
@@ -128,7 +143,7 @@ public class MainController {
     }
 
     private void printHeaderOfTable(String tableName, int fieldLength) {
-        ArrayList<String> tableColumns = dbManager.getTableColumn(tableName);
+        ArrayList<String> tableColumns = dbManager.getTableColumns(tableName);
         int rowLength = (fieldLength + 1) * tableColumns.size() + 1;
 
         view.write(repeatString("-", rowLength));
@@ -151,8 +166,7 @@ public class MainController {
             String userPass = view.read();
             try {
                 dbManager.connect(dbName, userName, userPass);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 printError(e);
             }
             if (dbManager.getConnection() == null) {
@@ -171,7 +185,7 @@ public class MainController {
         String message = e.getMessage();
         Throwable cause = e.getCause();
         if (cause != null) {
-            message += " " +cause.getMessage();
+            message += " " + cause.getMessage();
         }
         view.write("Ошибка подключения к БД: " + message);
     }
@@ -182,7 +196,7 @@ public class MainController {
 
         printHeaderOfTable(tableName, fieldLength);
         for (int i = 0; i < tableData.size(); i++) {
-            view.write("|"+tableData.get(i).getValuesFormated(format)+"|");
+            view.write("|" + tableData.get(i).getValuesFormated(format) + "|");
         }
     }
 

@@ -116,7 +116,7 @@ public class JDBCPosgreManager implements DatabaseManager {
     }
 
     @Override
-    public ArrayList<String> getTableColumn(String tableName) {
+    public ArrayList<String> getTableColumns(String tableName) {
         ArrayList<String> result = new ArrayList<>();
         String sql = "SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS where table_name = '" + tableName + "'";
         try {
@@ -147,7 +147,7 @@ public class JDBCPosgreManager implements DatabaseManager {
     }
 
     @Override
-    public DataSet getRow(String tableName, int rowId) {
+    public DataSet getRow(String tableName, String rowId) {
         DataSet result = new DataSet();
         String sql = "SELECT * FROM " + tableName + " WHERE id=" + rowId;
         ArrayList<DataSet> queryData = getQueryData(sql);
