@@ -26,7 +26,16 @@ public class MainController {
     }
 
     public void run() {
-        connectDB();
+        try {
+            connectDB();
+            doCommand();
+        } catch (ExitException e) {
+            //do nothing
+            return;
+        }
+    }
+
+    private void doCommand() {
         while (true) {
             view.write("Введите команду:");
             String input = view.read();
