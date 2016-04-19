@@ -26,8 +26,8 @@ public class Find implements Command {
 
     @Override
     public void process(String[] arrayCommand) {
-        if (arrayCommand.length < 2) {
-            view.write("Не введено имя таблицы");
+        if (!(arrayCommand.length == 2 || arrayCommand.length == 4)) {
+            view.write("Не верное количество параметров команды find");
             return;
         }
 

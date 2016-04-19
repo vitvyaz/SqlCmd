@@ -81,14 +81,18 @@ public class JDBCPosgreManager implements DatabaseManager {
         return false;
     }
 
-    public void execQuery(String sql) {
+    @Override
+    public void clearTable(String tableName) {
+        execQuery("DELETE FROM " + tableName);
+    }
+
+    public void execQuery(String sql)  {
         try {
             Statement stmt = connection.createStatement();
             stmt.executeUpdate(sql);
             stmt.close();
         } catch (SQLException e) {
-            System.out.println("Ошибка sql query: " + sql);
-            e.printStackTrace();
+            throw new RuntimeException("Ошибка sql query: " + sql, e);
         }
     }
 

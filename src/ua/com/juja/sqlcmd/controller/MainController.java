@@ -20,22 +20,18 @@ public class MainController {
                 new List(view, dbManager),
                 new Find(view, dbManager),
                 new Update(view, dbManager),
+                new Insert(view, dbManager),
                 new Help(view),
+                new Clear(view, dbManager),
                 new Unsupported(view)
         };
     }
 
     public void run() {
-        try {
-            connectDB();
-            doCommand();
-        } catch (ExitException e) {
-            //do nothing
+        if (!connectDB()) {
             return;
         }
-    }
 
-    private void doCommand() {
         while (true) {
             view.write("Введите команду:");
             String input = view.read();
@@ -43,14 +39,22 @@ public class MainController {
             String[] arrayCommand = input.split(" ");
             for (Command command : commands) {
                 if (command.canProcess(arrayCommand[0])) {
+                    try {
                     command.process(arrayCommand);
+                    } catch (Exception e) {
+                        printError(e);
+                    }
+
+                    if (command.equals("exit")) {
+                        return;
+                    }
                     break;
                 }
             }
         }
     }
 
-    public void connectDB() {
+    public boolean connectDB() {
         while (dbManager.getConnection() == null) {
             view.write("Введите название базы данных(sqlcmd): ");
             String dbName = view.read();
@@ -68,11 +72,12 @@ public class MainController {
                 String input = view.read();
                 if (!input.equals("yes")) {
                     view.write("До свидания!");
-                    System.exit(0);
+                    return false;
                 }
             }
         }
         view.write("Подключение к базе данных выполнено");
+        return true;
     }
 
     private void printError(Exception e) {
@@ -81,7 +86,7 @@ public class MainController {
         if (cause != null) {
             message += " " + cause.getMessage();
         }
-        view.write("Ошибка подключения к БД: " + message);
+        view.write(message);
     }
 
 

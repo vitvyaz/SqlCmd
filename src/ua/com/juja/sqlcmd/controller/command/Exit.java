@@ -21,6 +21,5 @@ public class Exit implements Command {
     @Override
     public void process(String[] arrayCommand) {
         view.write("До свидания!");
-        throw new ExitException();
     }
 }

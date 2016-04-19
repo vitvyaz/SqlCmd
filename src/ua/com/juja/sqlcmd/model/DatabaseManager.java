@@ -24,4 +24,6 @@ public interface DatabaseManager {
 
     boolean isTableExist(String tableName);
 
+    void clearTable(String tableName);
+
 }
