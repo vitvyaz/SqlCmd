@@ -57,23 +57,55 @@ public class Find implements Command {
     }
 
     public void showTable(String tableName, ArrayList<DataSet> tableData) {
-        int fieldLength = 15; //TODO посчитать длины в каждой колонке
-        String format = "%15s|";
+        int[] columnsLengths = getColumnsLengths(tableName, tableData);
+//        int fieldLength = 15; //TODO посчитать длины в каждой колонке
+//        String format = "%15s|";
 
-        printHeaderOfTable(tableName, fieldLength);
+        printHeaderOfTable(tableName, columnsLengths);
         for (int i = 0; i < tableData.size(); i++) {
-            view.write("|" + tableData.get(i).getValuesFormated(format) + "|");
+            DataSet row = tableData.get(i);
+            String s = "|";
+            for (int j = 0; j < row.size(); j++) {
+                String format = " %" + columnsLengths[j] + "s |";
+                s += String.format(format, row.getValue(j));
+            }
+            view.write(s);
         }
     }
 
-    private void printHeaderOfTable(String tableName, int fieldLength) {
+    private int[] getColumnsLengths(String tableName, ArrayList<DataSet> tableData) {
         ArrayList<String> tableColumns = dbManager.getTableColumns(tableName);
-        int rowLength = (fieldLength + 1) * tableColumns.size() + 1;
+        int[] result = new int[tableColumns.size()];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = tableColumns.get(i).length();
+        }
+
+        for (DataSet row : tableData) {
+            for (int i = 0; i < row.size(); i++) {
+
+                if (row.getValue(i) != null) {
+                    int valueLength = row.getValue(i).toString().length();
+                    if (valueLength > result[i]) {
+                        result[i] = valueLength;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    private void printHeaderOfTable(String tableName, int[] columnsLengths) {
+        ArrayList<String> tableColumns = dbManager.getTableColumns(tableName);
+
+        int rowLength = 1;
+        for (int colLength : columnsLengths) {
+            rowLength += colLength + 3; // 3 - это 2 пробела и один разделитель | колонки
+        }
 
         view.write(repeatString("-", rowLength));
-        String format = "%" + fieldLength + "s|";
         String s = "|";
         for (int i = 0; i < tableColumns.size(); i++) {
+            String format = " %" + columnsLengths[i] + "s |";
             s += String.format(format, tableColumns.get(i));
         }
         view.write(s);

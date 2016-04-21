@@ -15,7 +15,7 @@ public class MainController {
     public MainController(JDBCPosgreManager dbManager, View view) {
         this.view = view;
         this.dbManager = dbManager;
-        commands = new Command[] {
+        commands = new Command[]{
                 new Exit(view),
                 new List(view, dbManager),
                 new Find(view, dbManager),
@@ -40,16 +40,15 @@ public class MainController {
             for (Command command : commands) {
                 if (command.canProcess(arrayCommand[0])) {
                     try {
-                    command.process(arrayCommand);
+                        command.process(arrayCommand);
                     } catch (Exception e) {
                         printError(e);
                     }
-
-                    if (command.equals("exit")) {
-                        return;
-                    }
                     break;
                 }
+            }
+            if (arrayCommand[0].equals("exit")) {
+                return;
             }
         }
     }

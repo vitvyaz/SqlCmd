@@ -20,8 +20,8 @@ public class IntegrationTest {
     private static ConfigurabeInputStream in;
     private static ByteArrayOutputStream out;
 
-    @BeforeClass
-    public static void setup() {
+    @Before
+    public void setup() {
         in = new ConfigurabeInputStream();
         out = new ByteArrayOutputStream();
 
@@ -43,10 +43,14 @@ public class IntegrationTest {
 
         //then
         assertEquals("Введите название базы данных(sqlcmd): \r\n" +
+                //sqlcmd
                 "Введите имя пользователя: \r\n" +
+                //postgres
                 "Введите пароль: \r\n" +
+                //postgres
                 "Подключение к базе данных выполнено\r\n" +
                 "Введите команду:\r\n" +
+                //exit
                 "До свидания!\r\n", getData());
     }
 
@@ -58,4 +62,29 @@ public class IntegrationTest {
             return e.getMessage();
         }
     }
+
+    @Test
+    public void ConnectWrongUserAndExitTest() {
+        //given
+        in.add("sqlcmd");
+        in.add("postgres");
+        in.add("postgre");
+        in.add("no");
+
+        //when
+        Main.main(new String[0]);
+
+        //then
+        assertEquals("Введите название базы данных(sqlcmd): \r\n" +
+                //sqlcmd
+                "Введите имя пользователя: \r\n" +
+                //postgres
+                "Введите пароль: \r\n" +
+                //postgres
+                "Не удается подключиться к базе данных: sqlcmd имя пользователя: postgres Ошибка при попытке подсоединения.\r\n" +
+                "Повторить попытку? (yes/no):\r\n" +
+                //no
+                "До свидания!\r\n", getData());
+    }
+
 }
