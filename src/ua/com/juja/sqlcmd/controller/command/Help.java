@@ -29,6 +29,10 @@ public class Help implements Command {
         view.write("\t\tвывести содержимое таблицы [LIMIT - количество строк OFFSET - начальная строка]");
         view.write("\tclear tableName");
         view.write("\t\tочистить содержимое таблицы");
+        view.write("\tdrop tableName");
+        view.write("\t\tудалить таблицу");
+        view.write("\tcreate tableName ( columnName1 dataType1 [PRIMARY KEY] [NOT NULL], ... comumnNameN dataTypeN [NOT NULL] )");
+        view.write("\t\tсоздать таблицу");
         view.write("\tinsert tableName");
         view.write("\t\tвставить строку в таблицу");
         view.write("\tupdate tableName ID");

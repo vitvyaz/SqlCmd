@@ -58,8 +58,6 @@ public class Find implements Command {
 
     public void showTable(String tableName, ArrayList<DataSet> tableData) {
         int[] columnsLengths = getColumnsLengths(tableName, tableData);
-//        int fieldLength = 15; //TODO посчитать длины в каждой колонке
-//        String format = "%15s|";
 
         printHeaderOfTable(tableName, columnsLengths);
         for (int i = 0; i < tableData.size(); i++) {

@@ -23,6 +23,8 @@ public class MainController {
                 new Insert(view, dbManager),
                 new Help(view),
                 new Clear(view, dbManager),
+                new Create(view, dbManager),
+                new Drop(view, dbManager),
                 new Unsupported(view)
         };
     }

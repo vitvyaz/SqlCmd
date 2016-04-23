@@ -23,7 +23,7 @@ public class JDBCPosgreManagerTest {
 
     @Test
     public void testGetAllTableNames() {
-        assertEquals("[test, users]",dbManager.getTableNames().toString());
+        assertEquals("[users, test]",dbManager.getTableNames().toString());
     }
 
     @Test

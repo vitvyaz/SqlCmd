@@ -86,6 +86,16 @@ public class JDBCPosgreManager implements DatabaseManager {
         execQuery("DELETE FROM " + tableName);
     }
 
+    @Override
+    public void dropTable(String tableName) {
+        execQuery("DROP TABLE IF EXISTS " + tableName);
+    }
+
+    @Override
+    public void createTable(String query) {
+        execQuery(query);
+    }
+
     public void execQuery(String sql)  {
         try {
             Statement stmt = connection.createStatement();

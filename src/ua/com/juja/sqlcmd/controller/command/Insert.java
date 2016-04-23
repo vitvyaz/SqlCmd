@@ -23,6 +23,11 @@ public class Insert implements Command {
 
     @Override
     public void process(String[] arrayCommand) {
+        if (arrayCommand.length < 2) {
+            view.write("Не введено имя таблицы");
+            return;
+        }
+
         String tableName = arrayCommand[1];
         if (!dbManager.isTableExist(tableName)) {
             view.write("Нет такой таблицы");

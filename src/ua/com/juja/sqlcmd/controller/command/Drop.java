@@ -4,20 +4,20 @@ import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
 
 /**
- * Created by Vitalii Viazovoi on 18.04.2016.
+ * Created by Vitalii Viazovoi on 23.04.2016.
  */
-public class Clear implements Command {
+public class Drop implements Command {
     private View view;
     private DatabaseManager dbManager;
 
-    public Clear(View view, DatabaseManager dbManager) {
+    public Drop(View view, DatabaseManager dbManager) {
         this.view = view;
         this.dbManager = dbManager;
     }
 
     @Override
     public boolean canProcess(String command) {
-        return command.equals("clear");
+        return command.equals("drop");
     }
 
     @Override
@@ -34,15 +34,15 @@ public class Clear implements Command {
             return;
         }
 
-        view.write(String.format("Удаляем все строки таблицы '%s'! Для подтверждения введите 'yes':", tableName));
+        view.write(String.format("Удаляем таблицу '%s'! Для подтверждения введите 'yes':", tableName));
         String input = view.read();
         if (!input.equals("yes")) {
-            view.write("Удаление строк таблицы отменено");
+            view.write("Удаление таблицы отменено");
             return;
         }
 
-        dbManager.clearTable(tableName);
-        view.write(String.format("Все строки в таблице %s удалены", tableName));
+        dbManager.dropTable(tableName);
+        view.write(String.format("Таблица %s удалена", tableName));
 
     }
 }

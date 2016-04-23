@@ -26,4 +26,8 @@ public interface DatabaseManager {
 
     void clearTable(String tableName);
 
+    void dropTable(String tableName);
+
+    void createTable(String query);
+
 }
