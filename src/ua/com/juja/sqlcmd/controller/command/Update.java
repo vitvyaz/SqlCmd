@@ -1,6 +1,5 @@
 package ua.com.juja.sqlcmd.controller.command;
 
-import ua.com.juja.sqlcmd.controller.command.Command;
 import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.model.JDBCPosgreManager;
@@ -38,7 +37,7 @@ public class Update implements Command {
         }
 
         String rowId = arrayCommand[2];
-        DataSet rowData = getRowData(tableName, rowId);
+        DataSet rowData = getAndWriteRowData(tableName, rowId);
         if (rowData == null) return;
 
         view.write("Введите данные к изменению в формате: field1 newValue1 field2 newValue2 ... ");
@@ -59,13 +58,13 @@ public class Update implements Command {
         condition.add("id", rowId);
         dbManager.updateQuery(tableName, dataToChange, condition);
         view.write("Измененная строка:");
-        getRowData(tableName, rowId);
+        getAndWriteRowData(tableName, rowId);
     }
 
-    private DataSet getRowData(String tableName, String rowId) {
+    private DataSet getAndWriteRowData(String tableName, String rowId) {
         DataSet rowData = dbManager.getRow(tableName, rowId);
         if (rowData.size() == 0) {
-            view.write("В таблице " + tableName + "нет строки с id: " + rowId);
+            view.write("В таблице " + tableName + " нет строки с id: " + rowId);
             return null;
         }
 

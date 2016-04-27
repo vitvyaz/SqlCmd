@@ -23,7 +23,7 @@ public class JDBCPosgreManagerTest {
 
     @Test
     public void testGetAllTableNames() {
-        assertEquals("[users, test]",dbManager.getTableNames().toString());
+        assertEquals("[test, users]",dbManager.getTableNames().toString());
     }
 
     @Test
@@ -83,7 +83,7 @@ public class JDBCPosgreManagerTest {
             dbManager.insertRow("users", input);
         }
 
-        users = dbManager.getTableData("users");;
+        users = dbManager.getTableData("users");
         assertEquals(13, users.size());
 
     }

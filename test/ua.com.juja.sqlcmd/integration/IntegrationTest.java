@@ -91,7 +91,7 @@ public class IntegrationTest {
                 //postgres
                 "Введите пароль: \r\n" +
                 //postgres
-                "Не удается подключиться к базе данных: sqlcmd имя пользователя: postgres FATAL: password authentication failed for user \"postgres\"\r\n" +
+                "Не удается подключиться к базе данных: sqlcmd имя пользователя: postgres Ошибка при попытке подсоединения.\r\n" +
                 "Повторить попытку? (yes/no):\r\n" +
                 //no
                 "До свидания!\r\n", getData());
@@ -212,7 +212,7 @@ public class IntegrationTest {
                 "Введите команду:\r\n" +
                 //clear wrongtablename
                 "Нет такой таблицы. Доступны таблицы:\r\n" +
-                "[users, test]\r\n" +
+                "[test, users]\r\n" +
                 "Введите команду:\r\n" +
                 //exit
                 "До свидания!\r\n", getData());
@@ -246,7 +246,7 @@ public class IntegrationTest {
                 "Введите команду:\r\n" +
                 //drop wrongtablename
                 "Нет такой таблицы. Доступны таблицы:\r\n" +
-                "[users, test]\r\n" +
+                "[test, users]\r\n" +
                 "Введите команду:\r\n" +
                 //exit
                 "До свидания!\r\n", getData());
@@ -341,7 +341,7 @@ public class IntegrationTest {
                 "Введите команду:\r\n" +
                 //find wrongtablename
                 "Нет такой таблицы. Доступны таблицы:\r\n" +
-                "[users, test]\r\n" +
+                "[test, users]\r\n" +
                 "Введите команду:\r\n" +
                 //exit
                 "До свидания!\r\n", getData());
@@ -457,7 +457,7 @@ public class IntegrationTest {
                 "Подключение к базе данных выполнено\r\n" +
                 "Введите команду:\r\n" +
                 //list
-                "[users, test]\r\n" +
+                "[test, users]\r\n" +
                 "Введите команду:\r\n" +
                 "До свидания!\r\n", getData());
     }
@@ -487,6 +487,141 @@ public class IntegrationTest {
                 //wrongcommand
                 "Введите правильно команду. (help - вывод списка команд)\r\n" +
                 "Введите команду:\r\n" +
+                "До свидания!\r\n", getData());
+    }
+
+    @Test
+    public void UpdateTest() {
+        //given
+        in.add("sqlcmd");
+        in.add("postgres");
+        in.add("postgres");
+        in.add("clear test");
+        in.add("yes");
+        in.add("insert test");
+        in.add("id 1 name Vasya password pass1");
+        in.add("insert test");
+        in.add("id 2 name Petya password pass2");
+        in.add("find test");
+        in.add("update test 1");
+        in.add("name VasyaPupkin");
+        in.add("find test");
+        in.add("exit");
+
+
+        //when
+        Main.main(new String[0]);
+
+        //then
+        assertEquals("Введите название базы данных(sqlcmd): \r\n" +
+                //sqlcmd
+                "Введите имя пользователя: \r\n" +
+                //postgres
+                "Введите пароль: \r\n" +
+                //postgres
+                "Подключение к базе данных выполнено\r\n" +
+                "Введите команду:\r\n" +
+                //clear test
+                "Удаляем все строки таблицы 'test'! Для подтверждения введите 'yes':\r\n" +
+                //yes
+                "Все строки в таблице test удалены\r\n" +
+                "Введите команду:\r\n" +
+                //insert test
+                "Введите данные в формате: field1 newValue1 field2 newValue2 ... \r\n" +
+                //id 1 name Vasya password pass1
+                "Строка добавлена\r\n" +
+                "Введите команду:\r\n" +
+                //insert test
+                "Введите данные в формате: field1 newValue1 field2 newValue2 ... \r\n" +
+                //id 2 name Petya password pass2
+                "Строка добавлена\r\n" +
+                "Введите команду:\r\n" +
+                //find test
+                "-------------------------\r\n" +
+                "| id |  name | password |\r\n" +
+                "-------------------------\r\n" +
+                "|  1 | Vasya |    pass1 |\r\n" +
+                "|  2 | Petya |    pass2 |\r\n" +
+                "Введите команду:\r\n" +
+                //update test 1
+                "-------------------------\n" +
+                "| id |  name | password |\n" +
+                "-------------------------\n" +
+                "|  1 | Vasya |    pass1 |\n" +
+                "-------------------------\r\n" +
+                "Введите данные к изменению в формате: field1 newValue1 field2 newValue2 ... \r\n" +
+                //id 1 name VasyaPupkin
+                "Измененная строка:\r\n" +
+                "-------------------------------\n" +
+                "| id |        name | password |\n" +
+                "-------------------------------\n" +
+                "|  1 | VasyaPupkin |    pass1 |\n" +
+                "-------------------------------\r\n" +
+                //find test
+                "Введите команду:\r\n" +
+                "-------------------------------\r\n" +
+                "| id |        name | password |\r\n" +
+                "-------------------------------\r\n" +
+                "|  2 |       Petya |    pass2 |\r\n" +
+                "|  1 | VasyaPupkin |    pass1 |\r\n" +
+                //exit
+                "Введите команду:\r\n" +
+                "До свидания!\r\n", getData());
+    }
+
+    @Test
+    public void UpdateWrongInputTest() {
+        //given
+        in.add("sqlcmd");
+        in.add("postgres");
+        in.add("postgres");
+        in.add("update");
+        in.add("update wrongtablename 1");
+        in.add("update test 77");
+        in.add("insert test");
+        in.add("id 1 name Vasya password pass1");
+        in.add("update test 1");
+        in.add("name");
+        in.add("exit");
+
+
+        //when
+        Main.main(new String[0]);
+
+        //then
+        assertEquals("Введите название базы данных(sqlcmd): \r\n" +
+                //sqlcmd
+                "Введите имя пользователя: \r\n" +
+                //postgres
+                "Введите пароль: \r\n" +
+                //postgres
+                "Подключение к базе данных выполнено\r\n" +
+                "Введите команду:\r\n" +
+                //update
+                "Неправильное количество параметров для команды update. Должно быть 3\r\n" +
+                "Введите команду:\r\n" +
+                //update wrongtablename 1
+                "Нет такой таблицы\r\n" +
+                "Введите команду:\r\n" +
+                //update test 77
+                "В таблице test нет строки с id: 77\r\n" +
+                "Введите команду:\r\n" +
+                //insert test
+                "Введите данные в формате: field1 newValue1 field2 newValue2 ... \r\n" +
+                //id 1 name Vasya password pass1
+                "Строка добавлена\r\n" +
+                "Введите команду:\r\n" +
+                //update test 1
+                "-------------------------\n" +
+                "| id |  name | password |\n" +
+                "-------------------------\n" +
+                "|  1 | Vasya |    pass1 |\n" +
+                "-------------------------\r\n" +
+                "Введите данные к изменению в формате: field1 newValue1 field2 newValue2 ... \r\n" +
+                //name
+                "Ошибка! Нечетное количество параметров\r\n" +
+                "Введите команду:\r\n" +
+                //exit
                 "До свидания!\r\n", getData());
     }
 

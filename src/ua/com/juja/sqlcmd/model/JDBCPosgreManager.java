@@ -2,6 +2,7 @@ package ua.com.juja.sqlcmd.model;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by Vitalii Viazovoi on 22.02.2016.
@@ -33,26 +34,25 @@ public class JDBCPosgreManager implements DatabaseManager {
     public ArrayList<String> getTableNames() {
         ArrayList<String> result = new ArrayList<>();
         String sql = "SELECT table_name FROM information_schema.tables WHERE table_schema='public'";
-        try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql))
+        {
             while (rs.next()) {
                 result.add(rs.getString(1));
             }
-            rs.close();
-            stmt.close();
         } catch (SQLException e) {
             System.out.println("Ошибка sql query: " + sql);
             e.printStackTrace();
         }
+        Collections.sort(result);
         return result;
     }
 
     private ArrayList<DataSet> getQueryData(String sql) {
         ArrayList<DataSet> tableData = new ArrayList<>();
-        try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql))
+        {
             ResultSetMetaData rsmd = rs.getMetaData();
             while (rs.next()) {
                 DataSet dataSet = new DataSet();
@@ -61,8 +61,6 @@ public class JDBCPosgreManager implements DatabaseManager {
                 }
                 tableData.add(dataSet);
             }
-            rs.close();
-            stmt.close();
         } catch (SQLException e) {
             System.out.println("Ошибка sql query: " + sql);
             e.printStackTrace();
@@ -97,10 +95,8 @@ public class JDBCPosgreManager implements DatabaseManager {
     }
 
     public void execQuery(String sql)  {
-        try {
-            Statement stmt = connection.createStatement();
+        try (Statement stmt = connection.createStatement()) {
             stmt.executeUpdate(sql);
-            stmt.close();
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка sql query: " + sql, e);
         }
@@ -134,14 +130,12 @@ public class JDBCPosgreManager implements DatabaseManager {
     public ArrayList<String> getTableColumns(String tableName) {
         ArrayList<String> result = new ArrayList<>();
         String sql = "SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS where table_name = '" + tableName + "'";
-        try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql))
+        {
             while (rs.next()) {
                 result.add(rs.getString(1));
             }
-            rs.close();
-            stmt.close();
         } catch (SQLException e) {
             System.out.println("Ошибка sql query: " + sql);
             e.printStackTrace();
