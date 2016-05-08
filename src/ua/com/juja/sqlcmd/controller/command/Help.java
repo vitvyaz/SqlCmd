@@ -1,25 +1,27 @@
 package ua.com.juja.sqlcmd.controller.command;
 
+import ua.com.juja.sqlcmd.controller.command.util.InputLine;
 import ua.com.juja.sqlcmd.view.View;
 
 /**
  * Created by Vitalii Viazovoi on 13.04.2016.
  */
-public class Help implements Command {
-
-    View view;
+public class Help extends Command {
 
     public Help(View view) {
-        this.view = view;
+        super(view);
+        description = "\thelp" +
+                "\t\tвывести список команд";
+        formats = new String[] {"help"};
     }
 
     @Override
-    public boolean canProcess(String command) {
-        return command.equals("help");
+    public boolean canProcess(InputLine line) {
+        return line.getWord(0).equals("help");
     }
 
     @Override
-    public void process(String[] arrayCommand) {
+    public void process(InputLine line) {
         view.write("Существующие команды:");
         view.write("\thelp");
         view.write("\t\tвывести список команд");

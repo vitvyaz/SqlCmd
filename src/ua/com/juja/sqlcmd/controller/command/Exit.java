@@ -1,25 +1,27 @@
 package ua.com.juja.sqlcmd.controller.command;
 
+import ua.com.juja.sqlcmd.controller.command.util.InputLine;
 import ua.com.juja.sqlcmd.view.View;
 
 /**
  * Created by Vitalii Viazovoi on 12.04.2016.
  */
-public class Exit implements Command {
-
-    private View view;
+public class Exit extends Command {
 
     public Exit(View view) {
-        this.view = view;
+        super(view);
+        description = "\texit" +
+                "\t\tвыход из программы";
+        formats = new String[] {"exit"};
     }
 
     @Override
-    public boolean canProcess(String command) {
-        return command.equals("exit");
+    public boolean canProcess(InputLine line) {
+        return line.getWord(0).equals("exit");
     }
 
     @Override
-    public void process(String[] arrayCommand) {
+    public void process(InputLine line) {
         view.write("До свидания!");
     }
 }

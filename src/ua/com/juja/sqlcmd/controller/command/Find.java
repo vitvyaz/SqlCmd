@@ -1,5 +1,6 @@
 package ua.com.juja.sqlcmd.controller.command;
 
+import ua.com.juja.sqlcmd.controller.command.util.InputLine;
 import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
@@ -9,52 +10,40 @@ import java.util.ArrayList;
 /**
  * Created by Vitalii Viazovoi on 12.04.2016.
  */
-public class Find implements Command {
-
-    private View view;
-    private DatabaseManager dbManager;
+public class Find extends Command {
 
     public Find(View view, DatabaseManager dbManager) {
-        this.view = view;
-        this.dbManager = dbManager;
+        super(view, dbManager);
+        description = "\tfind tableName [LIMIT OFFET] " +
+                "\t\tвывести содержимое таблицы [LIMIT - количество строк OFFSET - начальная строка]";
+        formats = new String[] {"find tableName", "find tableName LIMIT OFFET"};
     }
 
     @Override
-    public boolean canProcess(String command) {
-        return command.equals("find");
+    public boolean canProcess(InputLine line) {
+        return line.getWord(0).equals("find");
     }
 
     @Override
-    public void process(String[] arrayCommand) {
-        if (!(arrayCommand.length == 2 || arrayCommand.length == 4)) {
-            view.write("Не верное количество параметров команды find");
-            return;
+    public void process(InputLine line) {
+        if (formats != null) {
+            line.parametersNumberValidation(formats);
         }
 
-        String tableName = arrayCommand[1];
-        if (!isTableExist(tableName)) {
-            return;
-        }
-        ArrayList<DataSet> tableData;
-        if (arrayCommand.length == 2) {
+        String tableName = line.getWord(1);
+        line.tableNameValidation(dbManager, tableName);
+
+        ArrayList<DataSet> tableData = new ArrayList<>();
+        if (line.countWords() == 2) {
             tableData = dbManager.getTableData(tableName);
-            showTable(tableName, tableData);
-        } else if (arrayCommand.length == 4) {
-            int limit = Integer.valueOf(arrayCommand[2]);
-            int offset = Integer.valueOf(arrayCommand[3]);
+        } else if (line.countWords() == 4) {
+            int limit = Integer.valueOf(line.getWord(2));
+            int offset = Integer.valueOf(line.getWord(3));
             tableData = dbManager.getTableData(tableName, limit, offset);
-            showTable(tableName, tableData);
         }
+        showTable(tableName, tableData);
     }
 
-    private boolean isTableExist(String tableName) {
-        if (!dbManager.isTableExist(tableName)) {
-            view.write("Нет такой таблицы. Доступны таблицы:");
-            view.write(dbManager.getTableNames().toString());
-            return false;
-        }
-        return true;
-    }
 
     public void showTable(String tableName, ArrayList<DataSet> tableData) {
         int[] columnsLengths = getColumnsLengths(tableName, tableData);
@@ -97,6 +86,7 @@ public class Find implements Command {
 
         int rowLength = 1;
         for (int colLength : columnsLengths) {
+            //TODO remove magic number
             rowLength += colLength + 3; // 3 - это 2 пробела и один разделитель | колонки
         }
 

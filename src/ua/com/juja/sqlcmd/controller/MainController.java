@@ -1,6 +1,7 @@
 package ua.com.juja.sqlcmd.controller;
 
 import ua.com.juja.sqlcmd.controller.command.*;
+import ua.com.juja.sqlcmd.controller.command.util.InputLine;
 import ua.com.juja.sqlcmd.model.JDBCPosgreManager;
 import ua.com.juja.sqlcmd.view.View;
 
@@ -36,20 +37,18 @@ public class MainController {
 
         while (true) {
             view.write("Введите команду:");
-            String input = view.read();
-            input = input.replaceAll("\\s+", " ");
-            String[] arrayCommand = input.split(" ");
+            InputLine input = new InputLine(view.read());
             for (Command command : commands) {
-                if (command.canProcess(arrayCommand[0])) {
+                if (command.canProcess(input)) {
                     try {
-                        command.process(arrayCommand);
+                        command.process(input);
                     } catch (Exception e) {
                         printError(e);
                     }
                     break;
                 }
             }
-            if (arrayCommand[0].equals("exit")) {
+            if (input.getWord(0).equals("exit")) {
                 return;
             }
         }

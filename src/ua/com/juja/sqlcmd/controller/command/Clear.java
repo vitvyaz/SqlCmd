@@ -1,38 +1,34 @@
 package ua.com.juja.sqlcmd.controller.command;
 
+import ua.com.juja.sqlcmd.controller.command.util.InputLine;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
 
 /**
  * Created by Vitalii Viazovoi on 18.04.2016.
  */
-public class Clear implements Command {
-    private View view;
-    private DatabaseManager dbManager;
+public class Clear extends Command {
 
     public Clear(View view, DatabaseManager dbManager) {
-        this.view = view;
-        this.dbManager = dbManager;
+        super(view, dbManager);
+        description = "\tclear tableName" +
+                "\t\tочистить содержимое таблицы";
+        formats = new String[] {"clear tableName"};
     }
 
     @Override
-    public boolean canProcess(String command) {
-        return command.equals("clear");
+    public boolean canProcess(InputLine line) {
+        return line.getWord(0).equals("clear");
     }
 
     @Override
-    public void process(String[] arrayCommand) {
-        if (arrayCommand.length < 2) {
-            view.write("Не введено имя таблицы");
-            return;
+    public void process(InputLine line) {
+        if (formats != null) {
+            line.parametersNumberValidation(formats);
         }
 
-        String tableName = arrayCommand[1];
-        if (!dbManager.isTableExist(tableName)) {
-            view.write("Нет такой таблицы. Доступны таблицы:");
-            view.write(dbManager.getTableNames().toString());
-            return;
-        }
+        String tableName = line.getWord(1);
+        line.tableNameValidation(dbManager, tableName);
 
         view.write(String.format("Удаляем все строки таблицы '%s'! Для подтверждения введите 'yes':", tableName));
         String input = view.read();
@@ -45,4 +41,5 @@ public class Clear implements Command {
         view.write(String.format("Все строки в таблице %s удалены", tableName));
 
     }
+
 }
