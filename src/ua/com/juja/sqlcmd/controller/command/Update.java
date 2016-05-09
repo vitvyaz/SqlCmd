@@ -11,7 +11,7 @@ import ua.com.juja.sqlcmd.view.View;
  */
 public class Update extends Command {
 
-    public Update(View view, JDBCPosgreManager dbManager) {
+    public Update(View view, DatabaseManager dbManager) {
         super(view, dbManager);
         description = "\tupdate tableName ID" +
                 "\t\tизменить строку таблицы tableName (ID - идентификатор строки)";

@@ -21,7 +21,7 @@ public class Help extends Command {
     }
 
     @Override
-    public void process(InputLine line) {
+    public void process(InputLine line) {//todo переделать
         view.write("Существующие команды:");
         view.write("\thelp");
         view.write("\t\tвывести список команд");

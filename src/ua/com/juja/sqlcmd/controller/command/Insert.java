@@ -37,8 +37,7 @@ public class Insert extends Command {
         String[] arrayFieldValues = fieldsValues.split(" ");
 
         if (arrayFieldValues.length % 2 == 1) {
-            view.write("Ошибка! Нечетное количество параметров");
-            return;
+            throw new IllegalArgumentException("Ошибка! Нечетное количество параметров");
         }
 
         DataSet dataToChange = new DataSet();
