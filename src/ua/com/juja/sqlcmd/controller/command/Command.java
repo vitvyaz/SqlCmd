@@ -27,11 +27,11 @@ public abstract class Command {
 
     public abstract void process(InputLine line);
 
-    String getDescrition() {
+    public String getDescrition() {
         return description;
     }
 
-    String[] getFormats() {
+    public String[] getFormats() {
         return formats;
     }
 }

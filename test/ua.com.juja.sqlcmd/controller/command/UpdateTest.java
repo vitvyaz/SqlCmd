@@ -58,11 +58,16 @@ public class UpdateTest {
     @Test
     public void testUpdateRowData() {
         //given
-        DataSet rowData = new DataSet();
-        rowData.add("id", "12");
-        rowData.add("name", "Vasya");
-        rowData.add("password", "1111");
-        when(dbManager.getRow("users", "12")).thenReturn(rowData);
+        DataSet currentRow = new DataSet();
+        currentRow.add("id", "12");
+        currentRow.add("name", "Vasya");
+        currentRow.add("password", "1111");
+        DataSet changedRow = new DataSet();
+        changedRow.add("id", "12");
+        changedRow.add("name", "Ivan");
+        changedRow.add("password", "*****");
+
+        when(dbManager.getRow("users", "12")).thenReturn(currentRow).thenReturn(changedRow);
 
         when(dbManager.isTableExist("users")).thenReturn(true);
 
@@ -74,23 +79,69 @@ public class UpdateTest {
 
         //then
 
-        rowData = new DataSet();
-        rowData.add("id", "12");
-        rowData.add("name", "Ivan");
-        rowData.add("password", "*****");
         verify(view).read();
         shouldPrint(
                 "[-------------------------\n" +
-                "| id |  name | password |\n" +
-                "-------------------------\n" +
-                "| 12 | Vasya |     1111 |\n" +
-                "-------------------------, Введите данные к изменению в формате: field1 newValue1 field2 newValue2 ... ," +
-                " Измененная строка:, " +
-                "-------------------------\n" +
-                "| id |  name | password |\n" +
-                 "-------------------------\n" +
-                "| 12 | Ivan |     ***** |\n" +
-                "-------------------------]");
+                        "| id |  name | password |\n" +
+                        "-------------------------\n" +
+                        "| 12 | Vasya |     1111 |\n" +
+                        "-------------------------, Введите данные к изменению в формате: field1 newValue1 field2 newValue2 ... ," +
+                        " Измененная строка:, " +
+                        "------------------------\n" +
+                        "| id | name | password |\n" +
+                        "------------------------\n" +
+                        "| 12 | Ivan |    ***** |\n" +
+                        "------------------------]");
+    }
+
+    @Test
+    public void testUpdateInputWrongNumberOfNewValues() {
+        //given
+        DataSet currentRow = new DataSet();
+        currentRow.add("id", "12");
+        currentRow.add("name", "Vasya");
+        currentRow.add("password", "1111");
+
+        when(dbManager.getRow("users", "12")).thenReturn(currentRow);
+
+        when(dbManager.isTableExist("users")).thenReturn(true);
+
+        when(view.read()).thenReturn("name Ivan password");
+
+        //when
+        InputLine input = new InputLine("update users 12");
+        try {
+            command.process(input);
+            fail();
+        } catch (IllegalArgumentException e) {
+            //then
+            assertEquals("Ошибка! Нечетное количество параметров", e.getMessage());
+        }
+
+        verify(view).read();
+        shouldPrint(
+                "[-------------------------\n" +
+                        "| id |  name | password |\n" +
+                        "-------------------------\n" +
+                        "| 12 | Vasya |     1111 |\n" +
+                        "-------------------------, Введите данные к изменению в формате: field1 newValue1 field2 newValue2 ... ]");
+    }
+
+    @Test
+    public void testUpdateErrorRowIdNotExist() {
+        //given
+        when(dbManager.getRow("users", "99")).thenReturn(new DataSet());
+        when(dbManager.isTableExist("users")).thenReturn(true);
+
+        //when
+        InputLine input = new InputLine("update users 99");
+        try {
+            command.process(input);
+            fail();
+        } catch (IllegalArgumentException e) {
+            //then
+            assertEquals("В таблице users нет строки с id: 99", e.getMessage());
+        }
     }
 
     private void shouldPrint(String expected) {
@@ -99,77 +150,4 @@ public class UpdateTest {
         assertEquals(expected, captor.getAllValues().toString());
     }
 
-//    @Test
-//    public void testInsertRowDataErrorNotPairParameters() {
-//        //given
-//        when(view.read()).thenReturn("id 1 name Ivan password");
-//        when(dbManager.isTableExist("users")).thenReturn(true);
-//
-//        //when
-//        InputLine input = new InputLine("insert users");
-//        try {
-//            command.process(input);
-//            fail();
-//            //then
-//        } catch (IllegalArgumentException e) {
-//            verify(view).write("Введите данные в формате: field1 newValue1 field2 newValue2 ... ");
-//            verify(view).read();
-//            assertEquals("Ошибка! Нечетное количество параметров", e.getMessage());
-//        }
-//    }
-//
-//    @Test
-//    public void testInsertErrorWithMoreThenOneParameter() {
-//        //given
-//
-//        //when
-//        InputLine input = new InputLine("insert users 2");
-//        try {
-//            command.process(input);
-//            fail();
-//        } catch (IllegalArgumentException e) {
-//            //then
-//            assertEquals("Ошибка! Введено неправильное количество параметров команды insert ", e.getMessage());
-//        }
-//    }
-//
-//    @Test
-//    public void testFindErrorWithoutParameters() {
-//        //given
-//
-//        //when
-//        InputLine input = new InputLine("insert");
-//        try {
-//            command.process(input);
-//            fail();
-//        } catch (IllegalArgumentException e) {
-//            //then
-//            assertEquals("Ошибка! Введено неправильное количество параметров команды insert ", e.getMessage());
-//        }
-//    }
-//
-//    @Test
-//    public void testFindWithWrongTableName() {
-//        //given
-//
-//        when(dbManager.isTableExist("wrongTableName")).thenReturn(false);
-//        ArrayList<String> tableNames = new ArrayList<>();
-//        tableNames.add("test");
-//        tableNames.add("users");
-//        when(dbManager.getTableNames()).thenReturn(tableNames);
-//
-//        //when
-//        InputLine input = new InputLine("insert wrongTableName");
-//        try {
-//            command.process(input);
-//            fail();
-//        } catch (IllegalArgumentException e) {
-//            //then
-//            String expectedMessage =
-//                    "Ошибка! Нет такой таблицы. Доступны таблицы:\n" +
-//                    "[test, users]";
-//            assertEquals(expectedMessage, e.getMessage());
-//        }
-//    }
- }
-
+}

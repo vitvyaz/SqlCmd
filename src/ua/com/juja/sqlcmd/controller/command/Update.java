@@ -42,8 +42,7 @@ public class Update extends Command {
         String[] arrayFieldValues = fieldsValues.split(" ");
 
         if (arrayFieldValues.length % 2 == 1) {
-            view.write("Ошибка! Нечетное количество параметров");
-            return;
+            throw new IllegalArgumentException("Ошибка! Нечетное количество параметров");
         }
 
         DataSet dataToChange = new DataSet();
@@ -60,8 +59,7 @@ public class Update extends Command {
     private DataSet getAndWriteRowData(String tableName, String rowId) {
         DataSet rowData = dbManager.getRow(tableName, rowId);
         if (rowData.size() == 0) {
-            view.write("В таблице " + tableName + " нет строки с id: " + rowId);
-            return null;
+            throw new IllegalArgumentException("В таблице " + tableName + " нет строки с id: " + rowId);
         }
 
         view.write(rowData.getTable());
