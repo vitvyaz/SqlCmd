@@ -13,7 +13,7 @@ public class Update extends Command {
 
     public Update(View view, DatabaseManager dbManager) {
         super(view, dbManager);
-        description = "\tupdate tableName ID" +
+        description = "\tupdate tableName ID\n" +
                 "\t\tизменить строку таблицы tableName (ID - идентификатор строки)";
         formats = new String[] {"update tableName ID"};
     }

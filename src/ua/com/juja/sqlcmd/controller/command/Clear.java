@@ -11,7 +11,7 @@ public class Clear extends Command {
 
     public Clear(View view, DatabaseManager dbManager) {
         super(view, dbManager);
-        description = "\tclear tableName" +
+        description = "\tclear tableName\n" +
                 "\t\tочистить содержимое таблицы";
         formats = new String[] {"clear tableName"};
     }

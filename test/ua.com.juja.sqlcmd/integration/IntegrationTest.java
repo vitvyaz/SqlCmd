@@ -91,7 +91,7 @@ public class IntegrationTest {
                 //postgres
                 "Введите пароль: \r\n" +
                 //postgres
-                "Не удается подключиться к базе данных: sqlcmd имя пользователя: postgres FATAL: password authentication failed for user \"postgres\"\r\n" +
+                "Не удается подключиться к базе данных: sqlcmd имя пользователя: postgres Ошибка при попытке подсоединения.\r\n" +
                 "Повторить попытку? (yes/no):\r\n" +
                 //no
                 "До свидания!\r\n", getData());
@@ -361,6 +361,7 @@ public class IntegrationTest {
         Main.main(new String[0]);
 
         //then
+
         assertEquals("Введите название базы данных(sqlcmd): \r\n" +
                 //sqlcmd
                 "Введите имя пользователя: \r\n" +
@@ -371,24 +372,25 @@ public class IntegrationTest {
                 "Введите команду:\r\n" +
                 //help
                 "Существующие команды:\r\n" +
-                "\thelp\r\n" +
+                "\thelp\n" +
                 "\t\tвывести список команд\r\n" +
-                "\tlist\r\n" +
-                "\t\tвывести список таблиц\r\n" +
-                "\tfind tableName [LIMIT OFFET] \r\n" +
-                "\t\tвывести содержимое таблицы [LIMIT - количество строк OFFSET - начальная строка]\r\n" +
-                "\tclear tableName\r\n" +
-                "\t\tочистить содержимое таблицы\r\n" +
-                "\tdrop tableName\r\n" +
-                "\t\tудалить таблицу\r\n" +
-                "\tcreate tableName ( columnName1 dataType1 [PRIMARY KEY] [NOT NULL], ... comumnNameN dataTypeN [NOT NULL] )\r\n" +
-                "\t\tсоздать таблицу\r\n" +
-                "\tinsert tableName\r\n" +
-                "\t\tвставить строку в таблицу\r\n" +
-                "\tupdate tableName ID\r\n" +
-                "\t\tизменить строку таблицы tableName (ID - идентификатор строки)\r\n" +
-                "\texit\r\n" +
+                "\texit\n" +
                 "\t\tвыход из программы\r\n" +
+                "\tlist\n" +
+                "\t\tвывести список таблиц\r\n" +
+                "\tfind tableName [LIMIT OFFET]\n" +
+                "\t\tвывести содержимое таблицы [LIMIT - количество строк OFFSET - начальная строка]\r\n" +
+                "\tupdate tableName ID\n" +
+                "\t\tизменить строку таблицы tableName (ID - идентификатор строки)\r\n" +
+                "\tinsert tableName\n" +
+                "\t\tвставить строку в таблицу\r\n" +
+                "\tclear tableName\n" +
+                "\t\tочистить содержимое таблицы\r\n" +
+                "\tcreate tableName ( columnName1 dataType1 [PRIMARY KEY] [NOT NULL], ... " +
+                "columnNameN dataTypeN [NOT NULL] )\n" +
+                "\t\tсоздать таблицу\r\n" +
+                "\tdrop tableName\n" +
+                "\t\tудалить таблицу\r\n" +
                 "Введите команду:\r\n" +
                 //exit
                 "До свидания!\r\n", getData());

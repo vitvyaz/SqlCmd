@@ -11,7 +11,8 @@ public class Create extends Command {
 
     public Create(View view, DatabaseManager dbManager) {
         super(view, dbManager);
-        description = "\tcreate tableName ( columnName1 dataType1 [PRIMARY KEY] [NOT NULL], ... comumnNameN dataTypeN [NOT NULL] )" +
+        description = "\tcreate tableName ( columnName1 dataType1 [PRIMARY KEY] [NOT NULL]," +
+                " ... columnNameN dataTypeN [NOT NULL] )\n" +
                 "\t\tсоздать таблицу";
         formats = null;
     }

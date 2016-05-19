@@ -12,7 +12,7 @@ public class Insert extends Command {
 
     public Insert(View view, DatabaseManager dbManager) {
         super(view, dbManager);
-        description = "\tinsert tableName" +
+        description = "\tinsert tableName\n" +
                 "\t\tвставить строку в таблицу";
         formats = new String[] {"insert tableName"};
     }

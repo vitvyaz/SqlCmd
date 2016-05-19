@@ -10,7 +10,7 @@ public class Exit extends Command {
 
     public Exit(View view) {
         super(view);
-        description = "\texit" +
+        description = "\texit\n" +
                 "\t\tвыход из программы";
         formats = new String[] {"exit"};
     }

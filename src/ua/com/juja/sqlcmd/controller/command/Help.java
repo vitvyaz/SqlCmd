@@ -7,10 +7,11 @@ import ua.com.juja.sqlcmd.view.View;
  * Created by Vitalii Viazovoi on 13.04.2016.
  */
 public class Help extends Command {
+    private Command[] commands;
 
     public Help(View view) {
         super(view);
-        description = "\thelp" +
+        description = "\thelp\n" +
                 "\t\tвывести список команд";
         formats = new String[] {"help"};
     }
@@ -23,23 +24,14 @@ public class Help extends Command {
     @Override
     public void process(InputLine line) {//todo переделать
         view.write("Существующие команды:");
-        view.write("\thelp");
-        view.write("\t\tвывести список команд");
-        view.write("\tlist");
-        view.write("\t\tвывести список таблиц");
-        view.write("\tfind tableName [LIMIT OFFET] ");
-        view.write("\t\tвывести содержимое таблицы [LIMIT - количество строк OFFSET - начальная строка]");
-        view.write("\tclear tableName");
-        view.write("\t\tочистить содержимое таблицы");
-        view.write("\tdrop tableName");
-        view.write("\t\tудалить таблицу");
-        view.write("\tcreate tableName ( columnName1 dataType1 [PRIMARY KEY] [NOT NULL], ... comumnNameN dataTypeN [NOT NULL] )");
-        view.write("\t\tсоздать таблицу");
-        view.write("\tinsert tableName");
-        view.write("\t\tвставить строку в таблицу");
-        view.write("\tupdate tableName ID");
-        view.write("\t\tизменить строку таблицы tableName (ID - идентификатор строки)");
-        view.write("\texit");
-        view.write("\t\tвыход из программы");
+        for (Command item: commands) {
+            if(item.description != null) {
+                view.write(item.description);
+            }
+        }
+    }
+
+    public void setCommands(Command[] commands) {
+        this.commands = commands;
     }
 }

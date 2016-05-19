@@ -8,6 +8,7 @@ import java.util.Collections;
  * Created by Vitalii Viazovoi on 22.02.2016.
  */
 public class JDBCPosgreManager implements DatabaseManager {
+    public static final String DATABASE_URL = "jdbc:postgresql://localhost:5432/";
     private Connection connection;
 
     public Connection getConnection() {
@@ -19,11 +20,11 @@ public class JDBCPosgreManager implements DatabaseManager {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("You should add JDBC lib: org.postgresql", e);
+            throw new RuntimeException("Не подключена JDBC lib: org.postgresql", e);
         }
         try {
             connection = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5432/" + dataBase, user, password);
+                    DATABASE_URL + dataBase, user, password);
         } catch (SQLException e) {
             connection = null;
             throw new RuntimeException("Не удается подключиться к базе данных: " + dataBase + " имя пользователя: " + user, e);

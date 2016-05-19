@@ -5,6 +5,8 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import ua.com.juja.sqlcmd.controller.command.util.InputLine;
+import ua.com.juja.sqlcmd.model.DatabaseManager;
+import ua.com.juja.sqlcmd.model.JDBCPosgreManager;
 import ua.com.juja.sqlcmd.view.View;
 
 import static org.junit.Assert.assertEquals;
@@ -31,7 +33,6 @@ public class HelpTest {
         assertTrue(canProcess);
     }
 
-
     @Test
     public void testCanProcessQweString() {
         //given
@@ -48,7 +49,21 @@ public class HelpTest {
     @Test
     public void testProcessCommandHelp() {
         //given
-        Command command = new Help(view);
+        Help command = new Help(view);
+        DatabaseManager dbManager = new JDBCPosgreManager();
+        Command[] commands = new Command[]{
+                command,
+                new Exit(view),
+                new List(view, dbManager),
+                new Find(view, dbManager),
+                new Update(view, dbManager),
+                new Insert(view, dbManager),
+                new Clear(view, dbManager),
+                new Create(view, dbManager),
+                new Drop(view, dbManager),
+                new Unsupported(view)
+        };
+        command.setCommands(commands);
 
         //when
         InputLine input = new InputLine("help");
@@ -57,24 +72,25 @@ public class HelpTest {
         //then
         String expected =
                         "[Существующие команды:," +
-                        " 	help," +
-                        " 		вывести список команд," +
-                        " 	list," +
-                        " 		вывести список таблиц," +
-                        " 	find tableName [LIMIT OFFET] ," +
-                        " 		вывести содержимое таблицы [LIMIT - количество строк OFFSET - начальная строка]," +
-                        " 	clear tableName," +
-                        " 		очистить содержимое таблицы," +
-                        " 	drop tableName," +
-                        " 		удалить таблицу," +
-                        " 	create tableName ( columnName1 dataType1 [PRIMARY KEY] [NOT NULL], ... comumnNameN dataTypeN [NOT NULL] )," +
-                        " 		создать таблицу," +
-                        " 	insert tableName," +
-                        " 		вставить строку в таблицу," +
-                        " 	update tableName ID," +
-                        " 		изменить строку таблицы tableName (ID - идентификатор строки)," +
-                        " 	exit," +
-                        " 		выход из программы]";
+                        " 	help\n" +
+                        "\t\tвывести список команд," +
+                        " 	exit\n" +
+                        "\t\tвыход из программы," +
+                        " 	list\n" +
+                        "\t\tвывести список таблиц," +
+                        " 	find tableName [LIMIT OFFET]\n" +
+                        "\t\tвывести содержимое таблицы [LIMIT - количество строк OFFSET - начальная строка]," +
+                        " 	update tableName ID\n" +
+                        "\t\tизменить строку таблицы tableName (ID - идентификатор строки)," +
+                        " 	insert tableName\n" +
+                        "\t\tвставить строку в таблицу," +
+                        " 	clear tableName\n" +
+                        "\t\tочистить содержимое таблицы," +
+                        " 	create tableName ( columnName1 dataType1 [PRIMARY KEY] [NOT NULL], ..." +
+                                " columnNameN dataTypeN [NOT NULL] )\n" +
+                        "\t\tсоздать таблицу," +
+                        " 	drop tableName\n" +
+                        "\t\tудалить таблицу]";
 
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         Mockito.verify(view, Mockito.atLeastOnce()).write(captor.capture());

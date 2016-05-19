@@ -16,18 +16,20 @@ public class MainController {
     public MainController(JDBCPosgreManager dbManager, View view) {
         this.view = view;
         this.dbManager = dbManager;
+        Help commandHelp = new Help(view);
         commands = new Command[]{
+                commandHelp,
                 new Exit(view),
                 new List(view, dbManager),
                 new Find(view, dbManager),
                 new Update(view, dbManager),
                 new Insert(view, dbManager),
-                new Help(view),
                 new Clear(view, dbManager),
                 new Create(view, dbManager),
                 new Drop(view, dbManager),
                 new Unsupported(view)
         };
+        commandHelp.setCommands(commands);
     }
 
     public void run() {

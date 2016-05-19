@@ -14,7 +14,7 @@ public class Find extends Command {
 
     public Find(View view, DatabaseManager dbManager) {
         super(view, dbManager);
-        description = "\tfind tableName [LIMIT OFFET] " +
+        description = "\tfind tableName [LIMIT OFFET]\n" +
                 "\t\tвывести содержимое таблицы [LIMIT - количество строк OFFSET - начальная строка]";
         formats = new String[] {"find tableName", "find tableName LIMIT OFFET"};
     }

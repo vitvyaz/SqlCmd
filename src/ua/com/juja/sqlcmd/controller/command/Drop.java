@@ -11,7 +11,7 @@ public class Drop extends Command {
 
     public Drop(View view, DatabaseManager dbManager) {
         super(view, dbManager);
-        description = "\tdrop tableName" +
+        description = "\tdrop tableName\n" +
                 "\t\tудалить таблицу";
         formats = new String[] {"drop tableName"};
     }
