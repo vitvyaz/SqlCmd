@@ -39,6 +39,5 @@ public class InputLine {
             throw new IllegalArgumentException("Ошибка! Нет такой таблицы. Доступны таблицы:\n" +
                     dbManager.getTableNames().toString());
         }
-
     }
 }

@@ -90,6 +90,4 @@ public class MainController {
         }
         view.write(message);
     }
-
-
 }

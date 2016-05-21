@@ -22,7 +22,7 @@ public class Help extends Command {
     }
 
     @Override
-    public void process(InputLine line) {//todo переделать
+    public void process(InputLine line) {
         view.write("Существующие команды:");
         for (Command item: commands) {
             if(item.description != null) {

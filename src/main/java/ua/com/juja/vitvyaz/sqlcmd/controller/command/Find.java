@@ -44,7 +44,6 @@ public class Find extends Command {
         showTable(tableName, tableData);
     }
 
-
     public void showTable(String tableName, ArrayList<DataSet> tableData) {
         int[] columnsLengths = getColumnsLengths(tableName, tableData);
 
@@ -84,24 +83,19 @@ public class Find extends Command {
     private void printHeaderOfTable(String tableName, int[] columnsLengths) {
         ArrayList<String> tableColumns = dbManager.getTableColumns(tableName);
 
-        int rowLength = 1;
-        for (int colLength : columnsLengths) {
-            //TODO remove magic number
-            rowLength += colLength + 3; // 3 - это 2 пробела и один разделитель | колонки
-        }
-
-        view.write(repeatString("-", rowLength));
-        String s = "|";
+        StringBuilder columnsNames = new StringBuilder("|");
         for (int i = 0; i < tableColumns.size(); i++) {
             String format = " %" + columnsLengths[i] + "s |";
-            s += String.format(format, tableColumns.get(i));
+            columnsNames.append(String.format(format, tableColumns.get(i)));
         }
-        view.write(s);
-        view.write(repeatString("-", rowLength));
+
+        view.write(repeatString("-", columnsNames.length()));
+        view.write(columnsNames.toString());
+        view.write(repeatString("-", columnsNames.length()));
     }
 
     private String repeatString(String s, int times) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < times; i++) {
             result.append(s);
         }
