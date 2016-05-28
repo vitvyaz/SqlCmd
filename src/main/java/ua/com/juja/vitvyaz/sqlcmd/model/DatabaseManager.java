@@ -22,6 +22,8 @@ public interface DatabaseManager {
 
     DataSet getRow(String tableName, String rowId);
 
+    boolean isConnected();
+
     boolean isTableExist(String tableName);
 
     void clearTable(String tableName);

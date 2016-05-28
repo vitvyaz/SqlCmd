@@ -1,7 +1,6 @@
 package ua.com.juja.vitvyaz.sqlcmd.model;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * Created by Vitalii Viazovoi on 24.02.2016.
@@ -26,11 +25,11 @@ public class DataSet {
         }
     }
 
-    private ArrayList<Data> datas = new ArrayList<>();
+    private ArrayList<Data> data = new ArrayList<>();
 
 
     public void add(String name, Object value) {
-        datas.add(new Data(name, value));
+        data.add(new Data(name, value));
     }
 
     @Override
@@ -40,8 +39,8 @@ public class DataSet {
 
     public ArrayList<String> getNames() {
         ArrayList<String> result = new ArrayList<>();
-        for (int i = 0; i < datas.size(); i++) {
-            result.add(datas.get(i).getName());
+        for (int i = 0; i < data.size(); i++) {
+            result.add(data.get(i).getName());
         }
         return result;
     }
@@ -64,31 +63,31 @@ public class DataSet {
 
     public ArrayList<Object> getValues() {
         ArrayList<Object> result = new ArrayList<>();
-        for (int i = 0; i < datas.size(); i++) {
-            result.add(datas.get(i).getValue());
+        for (int i = 0; i < data.size(); i++) {
+            result.add(data.get(i).getValue());
         }
         return result;
     }
 
     public String getName (int i) {
-        return datas.get(i).getName();
+        return data.get(i).getName();
     }
 
     public Object getValue (int i) {
-        return datas.get(i).getValue();
+        return data.get(i).getValue();
     }
 
     public int size() {
-        return datas.size();
+        return data.size();
     }
 
     public String getTable() {
-        if (datas.size() == 0) {
+        if (data.size() == 0) {
             return "";
         }
         StringBuffer names = new StringBuffer();
         StringBuffer values = new StringBuffer();
-        for (int i = 0; i < datas.size(); i++) {
+        for (int i = 0; i < data.size(); i++) {
             int maxLength = Math.max(getName(i).length(), getValue(i).toString().length());
             String format = "| %" + maxLength + "s ";
             names.append(String.format(format, getName(i)));

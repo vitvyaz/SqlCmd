@@ -2,6 +2,7 @@ package ua.com.juja.vitvyaz.sqlcmd.controller;
 
 import ua.com.juja.vitvyaz.sqlcmd.controller.command.*;
 import ua.com.juja.vitvyaz.sqlcmd.controller.command.util.InputLine;
+import ua.com.juja.vitvyaz.sqlcmd.model.DatabaseManager;
 import ua.com.juja.vitvyaz.sqlcmd.model.JDBCPosgreManager;
 import ua.com.juja.vitvyaz.sqlcmd.view.View;
 
@@ -11,9 +12,9 @@ import ua.com.juja.vitvyaz.sqlcmd.view.View;
 public class MainController {
     private Command[] commands;
     private View view;
-    private JDBCPosgreManager dbManager;
+    private DatabaseManager dbManager;
 
-    public MainController(JDBCPosgreManager dbManager, View view) {
+    public MainController(DatabaseManager dbManager, View view) {
         this.view = view;
         this.dbManager = dbManager;
         Help commandHelp = new Help(view);
@@ -57,7 +58,7 @@ public class MainController {
     }
 
     public boolean connectDB() {
-        while (dbManager.getConnection() == null) {
+        while (!dbManager.isConnected()) {
             view.write("Введите название базы данных(sqlcmd): ");
             String dbName = view.read();
             view.write("Введите имя пользователя: ");
@@ -69,7 +70,7 @@ public class MainController {
             } catch (Exception e) {
                 printError(e);
             }
-            if (dbManager.getConnection() == null) {
+            if (!dbManager.isConnected()) {
                 view.write("Повторить попытку? (yes/no):");
                 String input = view.read();
                 if (!input.equals("yes")) {

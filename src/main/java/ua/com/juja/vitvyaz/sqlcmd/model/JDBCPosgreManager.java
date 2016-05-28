@@ -11,8 +11,12 @@ public class JDBCPosgreManager implements DatabaseManager {
     public static final String DATABASE_URL = "jdbc:postgresql://localhost:5432/";
     private Connection connection;
 
-    public Connection getConnection() {
-        return connection;
+    public boolean isConnected() {
+        if (connection != null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
