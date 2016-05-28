@@ -1,5 +1,7 @@
-package ua.com.juja.vitvyaz.sqlcmd.controller;
+package ua.com.juja.vitvyaz.sqlcmd;
 
+import ua.com.juja.vitvyaz.sqlcmd.controller.MainController;
+import ua.com.juja.vitvyaz.sqlcmd.model.DatabaseManager;
 import ua.com.juja.vitvyaz.sqlcmd.model.JDBCPosgreManager;
 import ua.com.juja.vitvyaz.sqlcmd.view.Console;
 import ua.com.juja.vitvyaz.sqlcmd.view.View;
@@ -9,7 +11,7 @@ import ua.com.juja.vitvyaz.sqlcmd.view.View;
  */
 public class Main {
     public static void main(String[] args) {
-        JDBCPosgreManager dbManager = new JDBCPosgreManager();
+        DatabaseManager dbManager = new JDBCPosgreManager();
         View view = new Console();
 
         MainController controller = new MainController(dbManager, view);
