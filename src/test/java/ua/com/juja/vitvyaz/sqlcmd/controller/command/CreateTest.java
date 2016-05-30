@@ -37,7 +37,6 @@ public class CreateTest {
         assertTrue(canProcess);
     }
 
-
     @Test
     public void testCanProcessQweString() {
         //when
@@ -59,6 +58,5 @@ public class CreateTest {
 
         //then
         Mockito.verify(view).write("Таблица test создана");
-
     }
 }

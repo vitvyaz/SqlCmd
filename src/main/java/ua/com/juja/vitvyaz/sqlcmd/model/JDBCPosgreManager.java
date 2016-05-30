@@ -3,12 +3,14 @@ package ua.com.juja.vitvyaz.sqlcmd.model;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by Vitalii Viazovoi on 22.02.2016.
  */
 public class JDBCPosgreManager implements DatabaseManager {
-    public static final String DATABASE_URL = "jdbc:postgresql://localhost:5432/";
+
+    public static final String DATABASE_URL = "jdbc:postgresql://localhost:5432/";//TODO use load proterties
     private Connection connection;
 
     public boolean isConnected() {
@@ -36,8 +38,19 @@ public class JDBCPosgreManager implements DatabaseManager {
     }
 
     @Override
-    public ArrayList<String> getTableNames() {
-        ArrayList<String> result = new ArrayList<>();
+    public void disConnect() {
+        if (connection !=null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @Override
+    public List<String> getTableNames() {
+        List<String> result = new ArrayList<>();
         String sql = "SELECT table_name FROM information_schema.tables WHERE table_schema='public'";
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql))
@@ -46,15 +59,14 @@ public class JDBCPosgreManager implements DatabaseManager {
                 result.add(rs.getString(1));
             }
         } catch (SQLException e) {
-            System.out.println("Ошибка sql query: " + sql);
-            e.printStackTrace();
+            throw new RuntimeException("Ошибка sql query: " + sql, e);
         }
         Collections.sort(result);
         return result;
     }
 
-    private ArrayList<DataSet> getQueryData(String sql) {
-        ArrayList<DataSet> tableData = new ArrayList<>();
+    private List<DataSet> getQueryData(String sql) {
+        List<DataSet> tableData = new ArrayList<>();
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql))
         {
@@ -67,15 +79,14 @@ public class JDBCPosgreManager implements DatabaseManager {
                 tableData.add(dataSet);
             }
         } catch (SQLException e) {
-            System.out.println("Ошибка sql query: " + sql);
-            e.printStackTrace();
+            throw new RuntimeException("Ошибка sql query: " + sql, e);
         }
         return tableData;
     }
 
     @Override
     public boolean isTableExist(String tableName) {
-        ArrayList<String> tableNames = getTableNames();
+        List<String> tableNames = getTableNames();
         for (String item : tableNames) {
             if (item.equals(tableName)) {
                 return true;
@@ -96,6 +107,7 @@ public class JDBCPosgreManager implements DatabaseManager {
 
     @Override
     public void createTable(String query) {
+        query = "CREATE TABLE IF NOT EXISTS " + query;
         execQuery(query);
     }
 
@@ -132,8 +144,8 @@ public class JDBCPosgreManager implements DatabaseManager {
     }
 
     @Override
-    public ArrayList<String> getTableColumns(String tableName) {
-        ArrayList<String> result = new ArrayList<>();
+    public List<String> getTableColumns(String tableName) {
+        List<String> result = new ArrayList<>();
         String sql = "SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS where table_name = '" + tableName + "'";
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql))
@@ -142,20 +154,19 @@ public class JDBCPosgreManager implements DatabaseManager {
                 result.add(rs.getString(1));
             }
         } catch (SQLException e) {
-            System.out.println("Ошибка sql query: " + sql);
-            e.printStackTrace();
+            throw new RuntimeException("Ошибка sql query: " + sql, e);
         }
         return result;
     }
 
     @Override
-    public ArrayList<DataSet> getTableData(String tableName) {
+    public List<DataSet> getTableData(String tableName) {
         String sql = "SELECT * FROM " + tableName;
         return getQueryData(sql);
     }
 
     @Override
-    public ArrayList<DataSet> getTableData(String tableName, int limit, int offset) {
+    public List<DataSet> getTableData(String tableName, int limit, int offset) {
         String sql = "SELECT * FROM " + tableName + " ORDER BY id LIMIT " + limit + " OFFSET " + offset;
         return getQueryData(sql);
     }
@@ -164,7 +175,7 @@ public class JDBCPosgreManager implements DatabaseManager {
     public DataSet getRow(String tableName, String rowId) {
         DataSet result = new DataSet();
         String sql = "SELECT * FROM " + tableName + " WHERE id=" + rowId;
-        ArrayList<DataSet> queryData = getQueryData(sql);
+        List<DataSet> queryData = getQueryData(sql);
         if (queryData.size() != 0) {
             result = queryData.get(0);
         }

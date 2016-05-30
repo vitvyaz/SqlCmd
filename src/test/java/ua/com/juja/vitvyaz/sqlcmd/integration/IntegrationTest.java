@@ -26,7 +26,7 @@ public class IntegrationTest {
         DatabaseManager dbManager = new JDBCPosgreManager();
         dbManager.connect("sqlcmd", "postgres", "postgres");
         dbManager.dropTable("test");
-        dbManager.createTable("CREATE TABLE test (id int PRIMARY KEY NOT NULL, name text, password text)");
+        dbManager.createTable("test (id int PRIMARY KEY NOT NULL, name text, password text)");
     }
 
     @Before
@@ -89,8 +89,8 @@ public class IntegrationTest {
                 //postgres
                 "Введите пароль: \n" +
                 //postgres
-                "Не удается подключиться к базе данных: sqlcmd имя пользователя: postgres FATAL:" +
-                        " password authentication failed for user \"postgres\"\n" +
+                "Не удается подключиться к базе данных: sqlcmd имя пользователя: postgres" +
+                        " Ошибка при попытке подсоединения.\n" +
                 "Повторить попытку? (yes/no):\n" +
                 //no
                 "До свидания!\n", getData());

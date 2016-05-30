@@ -3,7 +3,7 @@ package ua.com.juja.vitvyaz.sqlcmd.model;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -19,7 +19,6 @@ public class JDBCPosgreManagerTest {
         dbManager = new JDBCPosgreManager();
         dbManager.connect("sqlcmd", "postgres", "postgres");
     }
-
 
     @Test
     public void testGetAllTableNames() {
@@ -48,11 +47,10 @@ public class JDBCPosgreManagerTest {
 
         dbManager.updateQuery("users", dataToUpdate, condition);
 
-        ArrayList<DataSet> users = dbManager.getTableData("users");
+        List<DataSet> users = dbManager.getTableData("users");
         DataSet user = users.get(0);
         assertEquals("[name, password, id]", user.getNames().toString());
         assertEquals("[StivenPupkin, PupkinPassword, 13]", user.getValues().toString());
-
     }
 
     @Test
@@ -68,7 +66,7 @@ public class JDBCPosgreManagerTest {
         dbManager.insertRow("users", input);
 
         // then
-        ArrayList<DataSet> users = dbManager.getTableData("users");
+        List<DataSet> users = dbManager.getTableData("users");
         assertEquals(1, users.size());
 
         DataSet user = users.get(0);
@@ -82,10 +80,8 @@ public class JDBCPosgreManagerTest {
             input.add("password", "pass" + i);
             dbManager.insertRow("users", input);
         }
-
         users = dbManager.getTableData("users");
         assertEquals(13, users.size());
-
     }
 
     private void clearTableUsers() {

@@ -24,11 +24,11 @@ public class Create extends Command {
 
     @Override
     public void process(InputLine line) {
-        String query = "CREATE TABLE IF NOT EXISTS ";
+        StringBuilder query = new StringBuilder();
         for (int i = 1; i < line.countWords(); i++) {
-            query += line.getWord(i) + " ";
+            query.append(line.getWord(i) + " ");
         }
-        dbManager.createTable(query);
+        dbManager.createTable(query.toString());
         String tableName = line.getWord(1);
         view.write(String.format("Таблица %s создана", tableName));
     }

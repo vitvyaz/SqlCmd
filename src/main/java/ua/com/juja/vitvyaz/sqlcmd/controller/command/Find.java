@@ -6,6 +6,7 @@ import ua.com.juja.vitvyaz.sqlcmd.model.DatabaseManager;
 import ua.com.juja.vitvyaz.sqlcmd.view.View;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Vitalii Viazovoi on 12.04.2016.
@@ -33,7 +34,7 @@ public class Find extends Command {
         String tableName = line.getWord(1);
         line.tableNameValidation(dbManager, tableName);
 
-        ArrayList<DataSet> tableData = new ArrayList<>();
+        List<DataSet> tableData = new ArrayList<>();
         if (line.countWords() == 2) {
             tableData = dbManager.getTableData(tableName);
         } else if (line.countWords() == 4) {
@@ -44,7 +45,7 @@ public class Find extends Command {
         showTable(tableName, tableData);
     }
 
-    public void showTable(String tableName, ArrayList<DataSet> tableData) {
+    public void showTable(String tableName, List<DataSet> tableData) {
         int[] columnsLengths = getColumnsLengths(tableName, tableData);
 
         printHeaderOfTable(tableName, columnsLengths);
@@ -59,8 +60,8 @@ public class Find extends Command {
         }
     }
 
-    private int[] getColumnsLengths(String tableName, ArrayList<DataSet> tableData) {
-        ArrayList<String> tableColumns = dbManager.getTableColumns(tableName);
+    private int[] getColumnsLengths(String tableName, List<DataSet> tableData) {
+        List<String> tableColumns = dbManager.getTableColumns(tableName);
         int[] result = new int[tableColumns.size()];
         for (int i = 0; i < result.length; i++) {
             result[i] = tableColumns.get(i).length();
@@ -81,7 +82,7 @@ public class Find extends Command {
     }
 
     private void printHeaderOfTable(String tableName, int[] columnsLengths) {
-        ArrayList<String> tableColumns = dbManager.getTableColumns(tableName);
+        List<String> tableColumns = dbManager.getTableColumns(tableName);
 
         StringBuilder columnsNames = new StringBuilder("|");
         for (int i = 0; i < tableColumns.size(); i++) {
