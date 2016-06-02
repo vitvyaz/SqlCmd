@@ -27,7 +27,6 @@ public class UpdateTest {
         view = mock(View.class);
         dbManager = mock(DatabaseManager.class);
         command = new Update(view, dbManager);
-
     }
 
     @Test
@@ -78,7 +77,6 @@ public class UpdateTest {
         command.process(input);
 
         //then
-
         verify(view).read();
         shouldPrint(
                 "[-------------------------\n" +
@@ -149,5 +147,4 @@ public class UpdateTest {
         verify(view, atLeastOnce()).write(captor.capture());
         assertEquals(expected, captor.getAllValues().toString());
     }
-
 }

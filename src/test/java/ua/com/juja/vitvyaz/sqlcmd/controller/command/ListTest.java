@@ -25,7 +25,6 @@ public class ListTest {
         view = mock(View.class);
         dbManager = mock(DatabaseManager.class);
         command = new List(view, dbManager);
-
     }
 
     @Test

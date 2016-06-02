@@ -64,7 +64,6 @@ public class DropTest {
         verify(view).write("Удаляем таблицу 'users'! Для подтверждения введите 'yes':");
         verify(view).read();
         verify(view).write("Таблица users удалена");
-
     }
 
     @Test
@@ -81,7 +80,6 @@ public class DropTest {
         verify(view).write("Удаляем таблицу 'users'! Для подтверждения введите 'yes':");
         verify(view).read();
         verify(view).write("Удаление таблицы отменено");
-
     }
 
     @Test

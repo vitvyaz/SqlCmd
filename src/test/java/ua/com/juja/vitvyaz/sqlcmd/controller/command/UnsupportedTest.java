@@ -5,7 +5,6 @@ import org.mockito.Mockito;
 import ua.com.juja.vitvyaz.sqlcmd.controller.command.util.InputLine;
 import ua.com.juja.vitvyaz.sqlcmd.view.View;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -39,6 +38,5 @@ public class UnsupportedTest {
 
         //then
         Mockito.verify(view).write("Введите правильно команду. (help - вывод списка команд)");
-
     }
 }

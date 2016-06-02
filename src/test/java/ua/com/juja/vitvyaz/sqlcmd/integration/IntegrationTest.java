@@ -39,7 +39,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void ConnectAndExitTest() {
+    public void testConnectAndExit() {
         //given
         in.add("sqlcmd");
         in.add("postgres");
@@ -72,7 +72,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void ConnectWrongUserAndExitTest() {
+    public void testConnectWrongUserAndExit() {
         //given
         in.add("sqlcmd");
         in.add("postgres");
@@ -97,7 +97,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void DropAndCreateTableTest() {
+    public void testDropAndCreateTable() {
         //given
         in.add("sqlcmd");
         in.add("postgres");
@@ -144,7 +144,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void ClearTableTest() {
+    public void testClearTable() {
         //given
         in.add("sqlcmd");
         in.add("postgres");
@@ -181,7 +181,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void ClearTableWrongInputTest() {
+    public void testClearTableWrongInput() {
         //given
         in.add("sqlcmd");
         in.add("postgres");
@@ -214,7 +214,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void DropTableWrongInputTest() {
+    public void testDropTableWrongInput() {
         //given
         in.add("sqlcmd");
         in.add("postgres");
@@ -247,7 +247,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void InsertAndFindTest() {
+    public void testInsertAndFind() {
         //given
         in.add("sqlcmd");
         in.add("postgres");
@@ -307,7 +307,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void FindWrongInputTest() {
+    public void testFindWrongInput() {
         //given
         in.add("sqlcmd");
         in.add("postgres");
@@ -340,7 +340,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void HelpTest() {
+    public void testHelp() {
         //given
         in.add("sqlcmd");
         in.add("postgres");
@@ -352,7 +352,6 @@ public class IntegrationTest {
         Main.main(new String[0]);
 
         //then
-
         assertEquals("Введите название базы данных(sqlcmd): \n" +
                 //sqlcmd
                 "Введите имя пользователя: \n" +
@@ -388,7 +387,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void InsertWrongInputTest() {
+    public void testInsertWrongInput() {
         //given
         in.add("sqlcmd");
         in.add("postgres");
@@ -398,7 +397,6 @@ public class IntegrationTest {
         in.add("insert test");
         in.add("id 1 name");
         in.add("exit");
-
 
         //when
         Main.main(new String[0]);
@@ -429,14 +427,13 @@ public class IntegrationTest {
     }
 
     @Test
-    public void ListTest() {
+    public void testList() {
         //given
         in.add("sqlcmd");
         in.add("postgres");
         in.add("postgres");
         in.add("list");
         in.add("exit");
-
 
         //when
         Main.main(new String[0]);
@@ -457,14 +454,13 @@ public class IntegrationTest {
     }
 
     @Test
-    public void UnsupportedTest() {
+    public void testUnsupported() {
         //given
         in.add("sqlcmd");
         in.add("postgres");
         in.add("postgres");
         in.add("wrongcommand");
         in.add("exit");
-
 
         //when
         Main.main(new String[0]);
@@ -485,7 +481,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void UpdateTest() {
+    public void testUpdate() {
         //given
         in.add("sqlcmd");
         in.add("postgres");
@@ -563,7 +559,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void UpdateWrongInputTest() {
+    public void testUpdateWrongInput() {
         //given
         in.add("sqlcmd");
         in.add("postgres");
@@ -576,7 +572,6 @@ public class IntegrationTest {
         in.add("update test 1");
         in.add("name");
         in.add("exit");
-
 
         //when
         Main.main(new String[0]);

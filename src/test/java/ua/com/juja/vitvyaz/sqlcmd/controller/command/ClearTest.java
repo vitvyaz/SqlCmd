@@ -64,7 +64,6 @@ public class ClearTest {
         verify(view).write("Удаляем все строки таблицы 'users'! Для подтверждения введите 'yes':");
         verify(view).read();
         verify(view).write("Все строки в таблице users удалены");
-
     }
 
     @Test
@@ -81,7 +80,6 @@ public class ClearTest {
         verify(view).write("Удаляем все строки таблицы 'users'! Для подтверждения введите 'yes':");
         verify(view).read();
         verify(view).write("Удаление строк таблицы отменено");
-
     }
 
     @Test
