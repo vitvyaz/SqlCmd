@@ -75,7 +75,7 @@ public class HelpTest {
                         "\t\tвывести список команд," +
                         " 	exit\n" +
                         "\t\tвыход из программы," +
-                        " 	list\n" +
+                        " 	tables\n" +
                         "\t\tвывести список таблиц," +
                         " 	find tableName [LIMIT OFFET]\n" +
                         "\t\tвывести содержимое таблицы [LIMIT - количество строк OFFSET - начальная строка]," +

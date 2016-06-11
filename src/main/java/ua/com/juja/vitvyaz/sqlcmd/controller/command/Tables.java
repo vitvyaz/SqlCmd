@@ -12,7 +12,7 @@ public class Tables extends Command {
 
     public Tables(View view, DatabaseManager dbManager) {
         super(view, dbManager);
-        description = "\tlist\n" +
+        description = "\ttables\n" +
                 "\t\tвывести список таблиц";
         formats = new String[] {"tables"};
     }

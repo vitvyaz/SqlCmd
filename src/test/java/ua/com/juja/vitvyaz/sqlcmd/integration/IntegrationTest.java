@@ -366,7 +366,7 @@ public class IntegrationTest {
                 "\t\tвывести список команд\n" +
                 "\texit\n" +
                 "\t\tвыход из программы\n" +
-                "\tlist\n" +
+                "\ttables\n" +
                 "\t\tвывести список таблиц\n" +
                 "\tfind tableName [LIMIT OFFET]\n" +
                 "\t\tвывести содержимое таблицы [LIMIT - количество строк OFFSET - начальная строка]\n" +
