@@ -128,12 +128,17 @@ public class JDBCPosgreManager implements DatabaseManager {
         String dataToUpdate = " SET (" + dataToChange.getNamesFormated(" %s,") + ") = "
                 + "(" + dataToChange.getValuesFormated(" '%s',") + ")";
 
+        Set<String> conditionNames = condition.getNames();
+        Iterator<String> iteratorNames = conditionNames.iterator();
         String conditionToUpdate = "";
+        String name;
         if (condition.size() > 0) {
-            conditionToUpdate = " WHERE " + condition.getName(0) + " = '" + condition.getValue(0) + "'";
+            name = iteratorNames.next();
+            conditionToUpdate = " WHERE " + name + " = '" + condition.getValue(name) + "'";
         }
         for (int i = 1; i < condition.size(); i++) {
-            conditionToUpdate += " AND " + condition.getName(i) + " = '" + condition.getValue(i) + "'";
+            name = iteratorNames.next();
+            conditionToUpdate += " AND " + name + " = '" + condition.getValue(name) + "'";
         }
 
         String sql = "UPDATE " + tableName + dataToUpdate + conditionToUpdate;

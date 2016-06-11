@@ -3,7 +3,6 @@ package ua.com.juja.vitvyaz.sqlcmd.controller.command;
 import ua.com.juja.vitvyaz.sqlcmd.controller.command.util.InputLine;
 import ua.com.juja.vitvyaz.sqlcmd.model.DataSet;
 import ua.com.juja.vitvyaz.sqlcmd.model.DatabaseManager;
-import ua.com.juja.vitvyaz.sqlcmd.model.JDBCPosgreManager;
 import ua.com.juja.vitvyaz.sqlcmd.view.View;
 
 /**
@@ -62,7 +61,7 @@ public class Update extends Command {
             throw new IllegalArgumentException("В таблице " + tableName + " нет строки с id: " + rowId);
         }
 
-        view.write(rowData.getTable());
+        view.write(rowData.buildTable());
         return rowData;
     }
 }

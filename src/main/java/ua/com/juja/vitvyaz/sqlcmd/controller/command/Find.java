@@ -51,11 +51,12 @@ public class Find extends Command {
 
         printHeaderOfTable(tableName, columnsLengths);
         for (int i = 0; i < tableData.size(); i++) {
-            DataSet row = tableData.get(i);
+            List<Object> values = tableData.get(i).getValues();
             String s = "|";
-            for (int j = 0; j < row.size(); j++) {
-                String format = " %" + columnsLengths[j] + "s |";
-                s += String.format(format, row.getValue(j));
+            int columnIndex = 0;
+            for (Object value : values) {
+                String format = " %" + columnsLengths[columnIndex++] + "s |";
+                s += String.format(format, value);
             }
             view.write(s);
         }
@@ -70,14 +71,16 @@ public class Find extends Command {
         }
 
         for (DataSet row : tableData) {
-            for (int index = 0; index < row.size(); index++) {
-
-                if (row.getValue(index) != null) {
-                    int valueLength = row.getValue(index).toString().length();
+            List<Object> values = row.getValues();
+            int index = 0;
+            for (Object value : values) {
+                if (value != null) {
+                    int valueLength = value.toString().length();
                     if (valueLength > result[index]) {
                         result[index] = valueLength;
                     }
                 }
+                index++;
             }
         }
         return result;

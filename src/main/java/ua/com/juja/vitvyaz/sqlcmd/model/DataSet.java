@@ -1,35 +1,16 @@
 package ua.com.juja.vitvyaz.sqlcmd.model;
 
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * Created by Vitalii Viazovoi on 24.02.2016.
  */
 public class DataSet {
 
-    private static class Data {
-        String name;
-        Object value;
-
-        public Data(String name, Object value) {
-            this.name = name;
-            this.value = value;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public Object getValue() {
-            return value;
-        }
-    }
-
-    private ArrayList<Data> data = new ArrayList<>();
-
+    private Map<String, Object> data = new LinkedHashMap<>();
 
     public void add(String name, Object value) {
-        data.add(new Data(name, value));
+        data.put(name, value);
     }
 
     @Override
@@ -37,12 +18,8 @@ public class DataSet {
         return getNames().toString() + "\n" + getValues().toString() +"\n";
     }
 
-    public ArrayList<String> getNames() {
-        ArrayList<String> result = new ArrayList<>();
-        for (int i = 0; i < data.size(); i++) {
-            result.add(data.get(i).getName());
-        }
-        return result;
+    public Set<String> getNames() {
+        return data.keySet();
     }
 
     public String getNamesFormated(String format) {
@@ -61,45 +38,43 @@ public class DataSet {
         return values.substring(0, values.length() - 1);
     }
 
-    public ArrayList<Object> getValues() {
-        ArrayList<Object> result = new ArrayList<>();
-        for (int i = 0; i < data.size(); i++) {
-            result.add(data.get(i).getValue());
-        }
-        return result;
+    public List<Object> getValues() {
+        return new ArrayList<Object>(data.values());
     }
 
-    public String getName (int i) {
-        return data.get(i).getName();
-    }
-
-    public Object getValue (int i) {
-        return data.get(i).getValue();
+    public Object getValue(String name) {
+        return data.get(name);
     }
 
     public int size() {
         return data.size();
     }
 
-    public String getTable() {
+    public String buildTable() {
         if (data.size() == 0) {
             return "";
         }
-        StringBuffer names = new StringBuffer();
-        StringBuffer values = new StringBuffer();
-        for (int i = 0; i < data.size(); i++) {
-            int maxLength = Math.max(getName(i).length(), getValue(i).toString().length());
+        StringBuffer rowNames = new StringBuffer();
+        StringBuffer rowValues= new StringBuffer();
+
+        Set<String> names = getNames();
+        List<Object> values = getValues();
+        Iterator<Object> iteratorValues = values.iterator();
+        for (String name : names) {
+            String stringValue = iteratorValues.next().toString();
+            int maxLength = Math.max(name.length(), stringValue.length());
             String format = "| %" + maxLength + "s ";
-            names.append(String.format(format, getName(i)));
-            values.append(String.format(format, getValue(i)));
+            rowNames.append(String.format(format, name));
+            rowValues.append(String.format(format, stringValue));
         }
-        names.append("|");
-        values.append("|");
-        String lineString = repeatString("-", names.length());
+
+        rowNames.append("|");
+        rowValues.append("|");
+        String lineString = repeatString("-", rowNames.length());
         String result = lineString + "\n" +
-                names.toString() + "\n"+
+                rowNames.toString() + "\n"+
                 lineString + "\n" +
-                values.toString() + "\n" +
+                rowValues.toString() + "\n" +
                 lineString;
         return result;
     }
