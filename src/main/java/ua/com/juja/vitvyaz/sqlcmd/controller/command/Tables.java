@@ -8,18 +8,18 @@ import ua.com.juja.vitvyaz.sqlcmd.view.View;
 /**
  * Created by Vitalii Viazovoi on 12.04.2016.
  */
-public class List extends Command {
+public class Tables extends Command {
 
-    public List(View view, DatabaseManager dbManager) {
+    public Tables(View view, DatabaseManager dbManager) {
         super(view, dbManager);
         description = "\tlist\n" +
                 "\t\tвывести список таблиц";
-        formats = new String[] {"list"};
+        formats = new String[] {"tables"};
     }
 
     @Override
     public boolean canProcess(InputLine line) {
-        return line.getWord(0).equals("list");
+        return line.getWord(0).equals("tables");
     }
 
     @Override

@@ -3,7 +3,6 @@ package ua.com.juja.vitvyaz.sqlcmd.controller;
 import ua.com.juja.vitvyaz.sqlcmd.controller.command.*;
 import ua.com.juja.vitvyaz.sqlcmd.controller.command.util.InputLine;
 import ua.com.juja.vitvyaz.sqlcmd.model.DatabaseManager;
-import ua.com.juja.vitvyaz.sqlcmd.model.JDBCPosgreManager;
 import ua.com.juja.vitvyaz.sqlcmd.view.View;
 
 /**
@@ -21,7 +20,7 @@ public class MainController {
         commands = new Command[]{
                 commandHelp,
                 new Exit(view),
-                new List(view, dbManager),
+                new Tables(view, dbManager),
                 new Find(view, dbManager),
                 new Update(view, dbManager),
                 new Insert(view, dbManager),

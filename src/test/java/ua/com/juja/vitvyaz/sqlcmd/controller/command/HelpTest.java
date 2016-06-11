@@ -1,6 +1,5 @@
 package ua.com.juja.vitvyaz.sqlcmd.controller.command;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
@@ -54,7 +53,7 @@ public class HelpTest {
         Command[] commands = new Command[]{
                 command,
                 new Exit(view),
-                new List(view, dbManager),
+                new Tables(view, dbManager),
                 new Find(view, dbManager),
                 new Update(view, dbManager),
                 new Insert(view, dbManager),

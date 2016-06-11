@@ -15,7 +15,7 @@ import static org.mockito.Mockito.*;
 /**
  * Created by Vitalii Viazovoi on 07.05.2016.
  */
-public class ListTest {
+public class TablesTest {
 
     private View view;
     private DatabaseManager dbManager;
@@ -25,7 +25,7 @@ public class ListTest {
     public void setup() {
         view = mock(View.class);
         dbManager = mock(DatabaseManager.class);
-        command = new List(view, dbManager);
+        command = new Tables(view, dbManager);
     }
 
     @Test
@@ -33,7 +33,7 @@ public class ListTest {
         //given
 
         //when
-        InputLine input = new InputLine("list");
+        InputLine input = new InputLine("tables");
         boolean canProcess = command.canProcess(input);
 
         //then
@@ -62,7 +62,7 @@ public class ListTest {
         when(dbManager.getTableNames()).thenReturn(tableNames);
 
         //when
-        InputLine input = new InputLine("list");
+        InputLine input = new InputLine("tables");
         command.process(input);
 
         //then

@@ -427,12 +427,12 @@ public class IntegrationTest {
     }
 
     @Test
-    public void testList() {
+    public void testTables() {
         //given
         in.add("sqlcmd");
         in.add("postgres");
         in.add("postgres");
-        in.add("list");
+        in.add("tables");
         in.add("exit");
 
         //when
@@ -447,7 +447,7 @@ public class IntegrationTest {
                 //postgres
                 "Подключение к базе данных выполнено\n" +
                 "Введите команду:\n" +
-                //list
+                //tables
                 "[test, users]\n" +
                 "Введите команду:\n" +
                 "До свидания!\n", getData());
