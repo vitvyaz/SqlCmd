@@ -7,6 +7,7 @@ import ua.com.juja.vitvyaz.sqlcmd.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Vitalii Viazovoi on 12.04.2016.
@@ -61,19 +62,20 @@ public class Find extends Command {
     }
 
     private int[] getColumnsLengths(String tableName, List<DataSet> tableData) {
-        List<String> tableColumns = dbManager.getTableColumns(tableName);
+        Set<String> tableColumns = dbManager.getTableColumns(tableName);
         int[] result = new int[tableColumns.size()];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = tableColumns.get(i).length();
+        int i = 0;
+        for (String column : tableColumns) {
+            result[i++] = column.length();
         }
 
         for (DataSet row : tableData) {
-            for (int i = 0; i < row.size(); i++) {
+            for (int index = 0; index < row.size(); index++) {
 
-                if (row.getValue(i) != null) {
-                    int valueLength = row.getValue(i).toString().length();
-                    if (valueLength > result[i]) {
-                        result[i] = valueLength;
+                if (row.getValue(index) != null) {
+                    int valueLength = row.getValue(index).toString().length();
+                    if (valueLength > result[index]) {
+                        result[index] = valueLength;
                     }
                 }
             }
@@ -82,12 +84,13 @@ public class Find extends Command {
     }
 
     private void printHeaderOfTable(String tableName, int[] columnsLengths) {
-        List<String> tableColumns = dbManager.getTableColumns(tableName);
+        Set<String> tableColumns = dbManager.getTableColumns(tableName);
 
         StringBuilder columnsNames = new StringBuilder("|");
-        for (int i = 0; i < tableColumns.size(); i++) {
-            String format = " %" + columnsLengths[i] + "s |";
-            columnsNames.append(String.format(format, tableColumns.get(i)));
+        int i = 0;
+        for (String column : tableColumns) {
+            String format = " %" + columnsLengths[i++] + "s |";
+            columnsNames.append(String.format(format, column));
         }
 
         view.write(repeatString("-", columnsNames.length()));

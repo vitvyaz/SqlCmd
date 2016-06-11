@@ -90,7 +90,7 @@ public class IntegrationTest {
                 "Введите пароль: \n" +
                 //postgres
                 "Не удается подключиться к базе данных: sqlcmd имя пользователя: postgres" +
-                        " Ошибка при попытке подсоединения.\n" +
+                        " FATAL: password authentication failed for user \"postgres\"\n" +
                 "Повторить попытку? (yes/no):\n" +
                 //no
                 "До свидания!\n", getData());

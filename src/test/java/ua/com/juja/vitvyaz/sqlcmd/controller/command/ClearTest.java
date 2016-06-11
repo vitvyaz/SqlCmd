@@ -6,7 +6,8 @@ import ua.com.juja.vitvyaz.sqlcmd.controller.command.util.InputLine;
 import ua.com.juja.vitvyaz.sqlcmd.model.DatabaseManager;
 import ua.com.juja.vitvyaz.sqlcmd.view.View;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -87,7 +88,7 @@ public class ClearTest {
         //given
         when(view.read()).thenReturn("yes");
         when(dbManager.isTableExist("wrongTableName")).thenReturn(false);
-        ArrayList<String> tableNames = new ArrayList<>();
+        Set<String> tableNames = new HashSet<>();
         tableNames.add("test");
         tableNames.add("users");
         when(dbManager.getTableNames()).thenReturn(tableNames);

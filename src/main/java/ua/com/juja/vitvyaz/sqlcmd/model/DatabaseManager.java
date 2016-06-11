@@ -1,6 +1,7 @@
 package ua.com.juja.vitvyaz.sqlcmd.model;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Vitalii Viazovoi on 28.03.2016.
@@ -10,13 +11,13 @@ public interface DatabaseManager {
 
     void disConnect();
 
-    List<String> getTableNames();
+    Set<String> getTableNames();
 
     void insertRow(String tableName, DataSet dataSet);
 
     void updateQuery(String tableName, DataSet dataToChange, DataSet condition);
 
-    List<String> getTableColumns(String tableName);
+    Set<String> getTableColumns(String tableName);
 
     List<DataSet> getTableData(String tableName);
 

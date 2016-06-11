@@ -8,7 +8,8 @@ import ua.com.juja.vitvyaz.sqlcmd.model.DataSet;
 import ua.com.juja.vitvyaz.sqlcmd.model.DatabaseManager;
 import ua.com.juja.vitvyaz.sqlcmd.view.View;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -52,7 +53,6 @@ public class InsertTest {
         //then
         assertFalse(canProcess);
     }
-
 
     @Test
     public void testInsertRowData() {
@@ -124,7 +124,7 @@ public class InsertTest {
         //given
 
         when(dbManager.isTableExist("wrongTableName")).thenReturn(false);
-        ArrayList<String> tableNames = new ArrayList<>();
+        Set<String> tableNames = new HashSet<>();
         tableNames.add("test");
         tableNames.add("users");
         when(dbManager.getTableNames()).thenReturn(tableNames);

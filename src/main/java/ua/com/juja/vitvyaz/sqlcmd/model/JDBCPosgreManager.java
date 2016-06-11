@@ -1,9 +1,7 @@
 package ua.com.juja.vitvyaz.sqlcmd.model;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Vitalii Viazovoi on 22.02.2016.
@@ -49,8 +47,8 @@ public class JDBCPosgreManager implements DatabaseManager {
     }
 
     @Override
-    public List<String> getTableNames() {
-        List<String> result = new ArrayList<>();
+    public Set<String> getTableNames() {
+        Set<String> result = new HashSet<>();
         String sql = "SELECT table_name FROM information_schema.tables WHERE table_schema='public'";
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql))
@@ -61,7 +59,6 @@ public class JDBCPosgreManager implements DatabaseManager {
         } catch (SQLException e) {
             throw new RuntimeException("Ошибка sql query: " + sql, e);
         }
-        Collections.sort(result);
         return result;
     }
 
@@ -86,7 +83,7 @@ public class JDBCPosgreManager implements DatabaseManager {
 
     @Override
     public boolean isTableExist(String tableName) {
-        List<String> tableNames = getTableNames();
+        Set<String> tableNames = getTableNames();
         for (String item : tableNames) {
             if (item.equals(tableName)) {
                 return true;
@@ -144,8 +141,8 @@ public class JDBCPosgreManager implements DatabaseManager {
     }
 
     @Override
-    public List<String> getTableColumns(String tableName) {
-        List<String> result = new ArrayList<>();
+    public Set<String> getTableColumns(String tableName) {
+        Set<String> result = new LinkedHashSet<>();
         String sql = "SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS where table_name = '" + tableName + "'";
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql))

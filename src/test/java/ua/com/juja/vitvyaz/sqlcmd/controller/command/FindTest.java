@@ -13,6 +13,9 @@ import ua.com.juja.vitvyaz.sqlcmd.model.DatabaseManager;
 import ua.com.juja.vitvyaz.sqlcmd.view.View;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Created by Vitalii Viazovoi on 07.05.2016.
@@ -46,7 +49,7 @@ public class FindTest {
         tableData.add(user2);
         when(dbManager.getTableData("users")).thenReturn(tableData);
 
-        ArrayList<String> tableColumns = new ArrayList<>();
+        Set<String> tableColumns = new LinkedHashSet<>();
         tableColumns.add("id");
         tableColumns.add("name");
         tableColumns.add("password");
@@ -103,7 +106,7 @@ public class FindTest {
         ArrayList<DataSet> tableData = new ArrayList<>();
         when(dbManager.getTableData("users")).thenReturn(tableData);
 
-        ArrayList<String> tableColumns = new ArrayList<>();
+        Set<String> tableColumns = new LinkedHashSet<>();
         tableColumns.add("id");
         tableColumns.add("name");
         tableColumns.add("password");
@@ -138,7 +141,7 @@ public class FindTest {
         tableData.add(user2);
         when(dbManager.getTableData("users", 2 , 2)).thenReturn(tableData);
 
-        ArrayList<String> tableColumns = new ArrayList<>();
+        Set<String> tableColumns = new LinkedHashSet<>();
         tableColumns.add("id");
         tableColumns.add("name");
         tableColumns.add("password");
@@ -194,7 +197,7 @@ public class FindTest {
         //given
 
         when(dbManager.isTableExist("wrongTableName")).thenReturn(false);
-        ArrayList<String> tableNames = new ArrayList<>();
+        Set<String> tableNames = new HashSet<>();
         tableNames.add("test");
         tableNames.add("users");
         when(dbManager.getTableNames()).thenReturn(tableNames);
