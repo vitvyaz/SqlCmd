@@ -90,7 +90,7 @@ public class IntegrationTest {
                 "Введите пароль: \n" +
                 //postgres
                 "Не удается подключиться к базе данных: sqlcmd имя пользователя: postgres" +
-                        " FATAL: password authentication failed for user \"postgres\"\n" +
+                        " Ошибка при попытке подсоединения.\n" +
                 "Повторить попытку? (yes/no):\n" +
                 //no
                 "До свидания!\n", getData());
@@ -295,12 +295,14 @@ public class IntegrationTest {
                 "-------------------------\n" +
                 "|  1 | Vasya |    pass1 |\n" +
                 "|  2 | Petya |    pass2 |\n" +
+                "-------------------------\n" +
                 "Введите команду:\n" +
                 //find test 2 1
                 "-------------------------\n" +
                 "| id |  name | password |\n" +
                 "-------------------------\n" +
                 "|  2 | Petya |    pass2 |\n" +
+                "-------------------------\n" +
                 //exit
                 "Введите команду:\n" +
                 "До свидания!\n", getData());
@@ -531,6 +533,7 @@ public class IntegrationTest {
                 "-------------------------\n" +
                 "|  1 | Vasya |    pass1 |\n" +
                 "|  2 | Petya |    pass2 |\n" +
+                "-------------------------\n" +
                 "Введите команду:\n" +
                 //update test 1
                 "-------------------------\n" +
@@ -553,6 +556,7 @@ public class IntegrationTest {
                 "-------------------------------\n" +
                 "|  2 |       Petya |    pass2 |\n" +
                 "|  1 | VasyaPupkin |    pass1 |\n" +
+                "-------------------------------\n" +
                 //exit
                 "Введите команду:\n" +
                 "До свидания!\n", getData());

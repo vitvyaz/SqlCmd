@@ -49,45 +49,4 @@ public class DataSet {
     public int size() {
         return data.size();
     }
-
-    public String buildTable() {
-        if (data.size() == 0) {
-            return "";
-        }
-        StringBuffer rowNames = new StringBuffer();
-        StringBuffer rowValues= new StringBuffer();
-
-        Set<String> names = getNames();
-        List<Object> values = getValues();
-        Iterator<Object> iteratorValues = values.iterator();
-        for (String name : names) {
-            String stringValue = iteratorValues.next().toString();
-            int maxLength = Math.max(name.length(), stringValue.length());
-            String format = "| %" + maxLength + "s ";
-            rowNames.append(String.format(format, name));
-            rowValues.append(String.format(format, stringValue));
-        }
-
-        rowNames.append("|");
-        rowValues.append("|");
-        String lineString = repeatString("-", rowNames.length());
-        String result = lineString + "\n" +
-                rowNames.toString() + "\n"+
-                lineString + "\n" +
-                rowValues.toString() + "\n" +
-                lineString;
-        return result;
-    }
-
-    private String repeatString(String s, int times) {
-        StringBuffer result = new StringBuffer();
-        for (int i = 0; i < times; i++) {
-            result.append(s);
-        }
-        return result.toString();
-    }
-
-
-
-
 }
