@@ -11,6 +11,7 @@ public class JDBCPosgreManager implements DatabaseManager {
     public static final String DATABASE_URL = "jdbc:postgresql://localhost:5432/";//TODO use load proterties
     private Connection connection;
 
+    @Override
     public boolean isConnected() {
         if (connection != null) {
             return true;
@@ -36,10 +37,11 @@ public class JDBCPosgreManager implements DatabaseManager {
     }
 
     @Override
-    public void disConnect() {
-        if (connection !=null) {
+    public void disconnect() {
+        if (connection != null) {
             try {
                 connection.close();
+                connection = null;
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -147,6 +149,9 @@ public class JDBCPosgreManager implements DatabaseManager {
 
     @Override
     public Set<String> getTableColumns(String tableName) {
+        if (isTableExist(tableName) != true) {
+            throw new IllegalArgumentException("Ошибка! Нет таблицы с именем: " + tableName);
+        }
         Set<String> result = new LinkedHashSet<>();
         String sql = "SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS where table_name = '" + tableName + "'";
         try (Statement stmt = connection.createStatement();

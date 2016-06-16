@@ -10,6 +10,9 @@ import ua.com.juja.vitvyaz.sqlcmd.model.JDBCPosgreManager;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 import static org.junit.Assert.assertEquals;
 
@@ -20,12 +23,14 @@ public class IntegrationTest {
 
     private static ConfigurabeInputStream in;
     private static ByteArrayOutputStream out;
+    private static Set<String> tablesWithoutTableTest = new HashSet<>();
 
     @BeforeClass
     public static void init() {
         DatabaseManager dbManager = new JDBCPosgreManager();
         dbManager.connect("sqlcmd", "postgres", "postgres");
         dbManager.dropTable("test");
+        tablesWithoutTableTest = dbManager.getTableNames();
         dbManager.createTable("test (id int PRIMARY KEY NOT NULL, name text, password text)");
     }
 
@@ -41,9 +46,7 @@ public class IntegrationTest {
     @Test
     public void testConnectAndExit() {
         //given
-        in.add("sqlcmd");
-        in.add("postgres");
-        in.add("postgres");
+        connectToDB();
         in.add("exit");
 
         //when
@@ -72,7 +75,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void testConnectWrongUserAndExit() {
+    public void testConnectWrongUserPasswordAndExit() {
         //given
         in.add("sqlcmd");
         in.add("postgres");
@@ -99,9 +102,7 @@ public class IntegrationTest {
     @Test
     public void testDropAndCreateTable() {
         //given
-        in.add("sqlcmd");
-        in.add("postgres");
-        in.add("postgres");
+        connectToDB();
         in.add("drop test");
         in.add("no");
         in.add("drop test");
@@ -146,9 +147,7 @@ public class IntegrationTest {
     @Test
     public void testClearTable() {
         //given
-        in.add("sqlcmd");
-        in.add("postgres");
-        in.add("postgres");
+        connectToDB();
         in.add("clear test");
         in.add("no");
         in.add("clear test");
@@ -183,9 +182,7 @@ public class IntegrationTest {
     @Test
     public void testClearTableWrongInput() {
         //given
-        in.add("sqlcmd");
-        in.add("postgres");
-        in.add("postgres");
+        connectToDB();
         in.add("clear");
         in.add("clear wrongtablename");
         in.add("exit");
@@ -216,9 +213,7 @@ public class IntegrationTest {
     @Test
     public void testDropTableWrongInput() {
         //given
-        in.add("sqlcmd");
-        in.add("postgres");
-        in.add("postgres");
+        connectToDB();
         in.add("drop");
         in.add("drop wrongtablename");
         in.add("exit");
@@ -249,9 +244,7 @@ public class IntegrationTest {
     @Test
     public void testInsertAndFind() {
         //given
-        in.add("sqlcmd");
-        in.add("postgres");
-        in.add("postgres");
+        connectToDB();
         in.add("clear test");
         in.add("yes");
         in.add("insert test");
@@ -311,9 +304,7 @@ public class IntegrationTest {
     @Test
     public void testFindWrongInput() {
         //given
-        in.add("sqlcmd");
-        in.add("postgres");
-        in.add("postgres");
+        connectToDB();
         in.add("find");
         in.add("find wrongtablename");
         in.add("exit");
@@ -344,9 +335,7 @@ public class IntegrationTest {
     @Test
     public void testHelp() {
         //given
-        in.add("sqlcmd");
-        in.add("postgres");
-        in.add("postgres");
+        connectToDB();
         in.add("help");
         in.add("exit");
 
@@ -391,9 +380,7 @@ public class IntegrationTest {
     @Test
     public void testInsertWrongInput() {
         //given
-        in.add("sqlcmd");
-        in.add("postgres");
-        in.add("postgres");
+        connectToDB();
         in.add("insert");
         in.add("insert wrongtablename");
         in.add("insert test");
@@ -431,9 +418,9 @@ public class IntegrationTest {
     @Test
     public void testTables() {
         //given
-        in.add("sqlcmd");
-        in.add("postgres");
-        in.add("postgres");
+        Set<String> expectedTableNames = new TreeSet<>(tablesWithoutTableTest);
+        expectedTableNames.add("test");
+        connectToDB();
         in.add("tables");
         in.add("exit");
 
@@ -450,7 +437,7 @@ public class IntegrationTest {
                 "Подключение к базе данных выполнено\n" +
                 "Введите команду:\n" +
                 //tables
-                "[test, users]\n" +
+                expectedTableNames.toString()+ "\n" +
                 "Введите команду:\n" +
                 "До свидания!\n", getData());
     }
@@ -458,9 +445,7 @@ public class IntegrationTest {
     @Test
     public void testUnsupported() {
         //given
-        in.add("sqlcmd");
-        in.add("postgres");
-        in.add("postgres");
+        connectToDB();
         in.add("wrongcommand");
         in.add("exit");
 
@@ -485,9 +470,7 @@ public class IntegrationTest {
     @Test
     public void testUpdate() {
         //given
-        in.add("sqlcmd");
-        in.add("postgres");
-        in.add("postgres");
+        connectToDB();
         in.add("clear test");
         in.add("yes");
         in.add("insert test");
@@ -565,9 +548,7 @@ public class IntegrationTest {
     @Test
     public void testUpdateWrongInput() {
         //given
-        in.add("sqlcmd");
-        in.add("postgres");
-        in.add("postgres");
+        connectToDB();
         in.add("update");
         in.add("update wrongtablename 1");
         in.add("update test 77");
@@ -618,4 +599,9 @@ public class IntegrationTest {
                 "До свидания!\n", getData());
     }
 
+    private void connectToDB() {
+        in.add("sqlcmd");
+        in.add("postgres");
+        in.add("postgres");
+    }
 }
