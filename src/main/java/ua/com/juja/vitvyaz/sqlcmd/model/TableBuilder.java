@@ -24,7 +24,7 @@ public class TableBuilder {
 
     @Override
     public String toString() {
-        int[] columnsLengths = getColumnsLengths(columns);
+        int[] columnsLengths = getColumnLengths(columns);
 
         StringBuilder columnsNames = new StringBuilder("|");
         int i = 0;
@@ -55,7 +55,7 @@ public class TableBuilder {
         return result.toString();
     }
 
-    private int[] getColumnsLengths(Set<String> columns) {
+    private int[] getColumnLengths(Set<String> columns) {
         int[] result = new int[columns.size()];
         int i = 0;
         for (String column : columns) {
