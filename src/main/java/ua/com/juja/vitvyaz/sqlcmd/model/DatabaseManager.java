@@ -15,7 +15,7 @@ public interface DatabaseManager {
 
     void insertRow(String tableName, DataSet dataSet);
 
-    void updateQuery(String tableName, DataSet dataToChange, DataSet condition);
+    void update(String tableName, DataSet dataToChange, DataSet condition);
 
     Set<String> getTableColumns(String tableName);
 

@@ -1,9 +1,7 @@
 package ua.com.juja.vitvyaz.sqlcmd.model;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 

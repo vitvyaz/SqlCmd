@@ -51,7 +51,7 @@ public class Update extends Command {
         }
         DataSet condition = new DataSet();
         condition.add("id", rowId);
-        dbManager.updateQuery(tableName, dataToChange, condition);
+        dbManager.update(tableName, dataToChange, condition);
         view.write("Измененная строка:");
         getAndWriteRowData(tableName, rowId);
     }

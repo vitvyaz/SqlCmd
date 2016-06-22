@@ -253,7 +253,7 @@ public class JDBCPosgreManagerTest {
         condition.add("id", 13);
         condition.add("name", "Stiven");
 
-        dbManager.updateQuery("test", dataToUpdate, condition);
+        dbManager.update("test", dataToUpdate, condition);
 
         List<DataSet> data = dbManager.getTableData("test");
         DataSet user = data.get(0);
@@ -281,7 +281,7 @@ public class JDBCPosgreManagerTest {
         DataSet condition = new DataSet();
         condition.add("id", 13);
 
-        dbManager.updateQuery("test", dataToUpdate, condition);
+        dbManager.update("test", dataToUpdate, condition);
 
         List<DataSet> data = dbManager.getTableData("test");
         DataSet user = data.get(0);

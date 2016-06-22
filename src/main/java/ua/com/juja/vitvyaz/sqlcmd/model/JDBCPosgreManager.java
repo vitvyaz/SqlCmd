@@ -1,5 +1,7 @@
 package ua.com.juja.vitvyaz.sqlcmd.model;
 
+import ua.com.juja.vitvyaz.sqlcmd.controller.command.util.Configuration;
+
 import java.sql.*;
 import java.util.*;
 
@@ -8,16 +10,11 @@ import java.util.*;
  */
 public class JDBCPosgreManager implements DatabaseManager {
 
-    public static final String DATABASE_URL = "jdbc:postgresql://localhost:5432/";//TODO use load proterties
     private Connection connection;
 
     @Override
     public boolean isConnected() {
-        if (connection != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return connection != null;
     }
 
     @Override
@@ -28,8 +25,13 @@ public class JDBCPosgreManager implements DatabaseManager {
             throw new RuntimeException("Не подключена JDBC lib: org.postgresql", e);
         }
         try {
-            connection = DriverManager.getConnection(
-                    DATABASE_URL + dataBase, user, password);
+            Configuration configuration = new Configuration();
+            String databaseUrl = String.format("%s%s:%s/%s",
+                    configuration.getDriver(),
+                    configuration.getServerName(),
+                    configuration.getPortNumber(),
+                    dataBase);
+            connection = DriverManager.getConnection(databaseUrl, user, password);
         } catch (SQLException e) {
             connection = null;
             throw new RuntimeException("Не удается подключиться к базе данных: " + dataBase + " имя пользователя: " + user, e);
@@ -126,7 +128,7 @@ public class JDBCPosgreManager implements DatabaseManager {
     }
 
     @Override
-    public void updateQuery(String tableName, DataSet dataToChange, DataSet condition) {
+    public void update(String tableName, DataSet dataToChange, DataSet condition) {
         String dataToUpdate = " SET (" + dataToChange.getNamesFormated(" %s,") + ") = "
                 + "(" + dataToChange.getValuesFormated(" '%s',") + ")";
 
@@ -149,7 +151,7 @@ public class JDBCPosgreManager implements DatabaseManager {
 
     @Override
     public Set<String> getTableColumns(String tableName) {
-        if (isTableExist(tableName) != true) {
+        if (!isTableExist(tableName)) {
             throw new IllegalArgumentException("Ошибка! Нет таблицы с именем: " + tableName);
         }
         Set<String> result = new LinkedHashSet<>();

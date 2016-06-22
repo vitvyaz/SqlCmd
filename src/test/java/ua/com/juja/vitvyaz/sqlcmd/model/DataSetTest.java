@@ -20,6 +20,5 @@ public class DataSetTest {
         assertEquals("[Pupkin, pass]", dataSet.getValues().toString());
         assertEquals("[name, password]\n[Pupkin, pass]\n", dataSet.toString());
         assertEquals("name|password", dataSet.getNamesFormated("%s|"));
-
     }
 }
