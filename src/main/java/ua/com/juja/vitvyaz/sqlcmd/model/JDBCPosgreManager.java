@@ -112,7 +112,7 @@ public class JDBCPosgreManager implements DatabaseManager {
         execQuery(query);
     }
 
-    public void execQuery(String sql)  {
+    private void execQuery(String sql)  {
         try (Statement stmt = connection.createStatement()) {
             stmt.executeUpdate(sql);
         } catch (SQLException e) {

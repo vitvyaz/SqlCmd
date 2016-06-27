@@ -7,15 +7,12 @@ import java.util.Set;
  * Created by Vitalii Viazovoi on 28.03.2016.
  */
 public interface DatabaseManager {
+
     void connect(String dataBase, String user, String password);
 
     void disconnect();
 
     Set<String> getTableNames();
-
-    void insertRow(String tableName, DataSet dataSet);
-
-    void update(String tableName, DataSet dataToChange, DataSet condition);
 
     Set<String> getTableColumns(String tableName);
 
@@ -25,14 +22,18 @@ public interface DatabaseManager {
 
     DataSet getRow(String tableName, String rowId);
 
-    boolean isConnected();
+    void insertRow(String tableName, DataSet dataSet);
 
-    boolean isTableExist(String tableName);
+    void update(String tableName, DataSet dataToChange, DataSet condition);
 
     void clearTable(String tableName);
 
     void dropTable(String tableName);
 
     void createTable(String query);
+
+    boolean isConnected();
+
+    boolean isTableExist(String tableName);
 
 }

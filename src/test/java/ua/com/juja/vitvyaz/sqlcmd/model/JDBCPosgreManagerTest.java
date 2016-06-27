@@ -227,7 +227,7 @@ public class JDBCPosgreManagerTest {
     @Test
     public void testGetAllTableNames() {
         dbManager.connect("sqlcmd", "postgres", "postgres");
-        Set<String> expectedTableNames = new TreeSet<>(tablesWithoutTableTest);
+        Set<String> expectedTableNames = new HashSet<>(tablesWithoutTableTest);
         expectedTableNames.add("test");
         assertEquals(expectedTableNames.toString(),dbManager.getTableNames().toString());
     }
@@ -322,6 +322,6 @@ public class JDBCPosgreManagerTest {
 
     private void connectAndClearTableTest() {
         dbManager.connect("sqlcmd", "postgres", "postgres");
-        dbManager.execQuery("DELETE FROM test");
+        dbManager.clearTable("test");
     }
 }

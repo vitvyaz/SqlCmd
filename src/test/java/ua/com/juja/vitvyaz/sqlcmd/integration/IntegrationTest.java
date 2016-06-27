@@ -418,7 +418,7 @@ public class IntegrationTest {
     @Test
     public void testTables() {
         //given
-        Set<String> expectedTableNames = new TreeSet<>(tablesWithoutTableTest);
+        Set<String> expectedTableNames = new HashSet<>(tablesWithoutTableTest);
         expectedTableNames.add("test");
         connectToDB();
         in.add("tables");
