@@ -63,7 +63,7 @@ public class InsertTest {
         command.process(input);
 
         //then
-        verify(view).write("Введите данные в формате: field1 newValue1 field2 newValue2 ... ");
+        verify(view).write("Введите данные в формате: columnName1 newValue1 columnName2 newValue2 ... ");
         verify(view).read();
         verify(view).write("Строка добавлена");
     }
@@ -81,7 +81,7 @@ public class InsertTest {
             fail();
             //then
         } catch (IllegalArgumentException e) {
-            verify(view).write("Введите данные в формате: field1 newValue1 field2 newValue2 ... ");
+            verify(view).write("Введите данные в формате: columnName1 newValue1 columnName2 newValue2 ... ");
             verify(view).read();
             assertEquals("Ошибка! Нечетное количество параметров", e.getMessage());
         }

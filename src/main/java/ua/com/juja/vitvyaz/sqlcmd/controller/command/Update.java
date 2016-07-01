@@ -33,10 +33,28 @@ public class Update extends Command {
         line.tableNameValidation(dbManager, tableName);
 
         String rowId = line.getWord(2);
-        DataSet rowData = getAndWriteRowData(tableName, rowId);
+        DataSet rowData = printRowData(tableName, rowId);
         if (rowData == null) return;
 
-        view.write("Введите данные к изменению в формате: field1 newValue1 field2 newValue2 ... ");
+        DataSet dataToChange = getDataToChange();
+
+        DataSet condition = new DataSet();
+        condition.add("id", rowId);
+        dbManager.update(tableName, dataToChange, condition);
+
+        printChangedRow(tableName, rowId, dataToChange);
+    }
+
+    private void printChangedRow(String tableName, String rowId, DataSet dataToChange) {
+        if (dataToChange.getValue("id") != null) {
+            rowId = dataToChange.getValue("id").toString();
+        }
+        view.write("Измененная строка:");
+        printRowData(tableName, rowId);
+    }
+
+    private DataSet getDataToChange() {
+        view.write("Введите данные к изменению в формате: columnName1 newValue1 columnName2 newValue2 ... ");
         String fieldsValues = view.read();
         fieldsValues = fieldsValues.replaceAll("\\s+", " ");
         String[] arrayFieldValues = fieldsValues.split(" ");
@@ -49,14 +67,10 @@ public class Update extends Command {
         for (int i = 0; i < arrayFieldValues.length; i += 2) {
             dataToChange.add(arrayFieldValues[i], arrayFieldValues[i + 1]);
         }
-        DataSet condition = new DataSet();
-        condition.add("id", rowId);
-        dbManager.update(tableName, dataToChange, condition);
-        view.write("Измененная строка:");
-        getAndWriteRowData(tableName, rowId);
+        return dataToChange;
     }
 
-    private DataSet getAndWriteRowData(String tableName, String rowId) {
+    private DataSet printRowData(String tableName, String rowId) {
         DataSet rowData = dbManager.getRow(tableName, rowId);
         if (rowData.size() == 0) {
             throw new IllegalArgumentException("В таблице " + tableName + " нет строки с id: " + rowId);

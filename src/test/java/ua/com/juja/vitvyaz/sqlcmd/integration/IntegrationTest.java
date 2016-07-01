@@ -274,12 +274,12 @@ public class IntegrationTest {
                 "Все строки в таблице test удалены\n" +
                 "Введите команду:\n" +
                 //insert test
-                "Введите данные в формате: field1 newValue1 field2 newValue2 ... \n" +
+                "Введите данные в формате: columnName1 newValue1 columnName2 newValue2 ... \n" +
                 //id 1 name Vasya password pass1
                 "Строка добавлена\n" +
                 "Введите команду:\n" +
                 //insert test
-                "Введите данные в формате: field1 newValue1 field2 newValue2 ... \n" +
+                "Введите данные в формате: columnName1 newValue1 columnName2 newValue2 ... \n" +
                 //id 2 name Petya password pass2
                 "Строка добавлена\n" +
                 "Введите команду:\n" +
@@ -408,7 +408,7 @@ public class IntegrationTest {
                 tables.toString() + "\n" +
                 "Введите команду:\n" +
                 //insert test
-                "Введите данные в формате: field1 newValue1 field2 newValue2 ... \n" +
+                "Введите данные в формате: columnName1 newValue1 columnName2 newValue2 ... \n" +
                 //id 1 name
                 "Ошибка! Нечетное количество параметров\n" +
                 "Введите команду:\n" +
@@ -502,12 +502,12 @@ public class IntegrationTest {
                 "Все строки в таблице test удалены\n" +
                 "Введите команду:\n" +
                 //insert test
-                "Введите данные в формате: field1 newValue1 field2 newValue2 ... \n" +
+                "Введите данные в формате: columnName1 newValue1 columnName2 newValue2 ... \n" +
                 //id 1 name Vasya password pass1
                 "Строка добавлена\n" +
                 "Введите команду:\n" +
                 //insert test
-                "Введите данные в формате: field1 newValue1 field2 newValue2 ... \n" +
+                "Введите данные в формате: columnName1 newValue1 columnName2 newValue2 ... \n" +
                 //id 2 name Petya password pass2
                 "Строка добавлена\n" +
                 "Введите команду:\n" +
@@ -525,7 +525,7 @@ public class IntegrationTest {
                 "-------------------------\n" +
                 "|  1 | Vasya |    pass1 |\n" +
                 "-------------------------\n" +
-                "Введите данные к изменению в формате: field1 newValue1 field2 newValue2 ... \n" +
+                "Введите данные к изменению в формате: columnName1 newValue1 columnName2 newValue2 ... \n" +
                 //id 1 name VasyaPupkin
                 "Измененная строка:\n" +
                 "-------------------------------\n" +
@@ -582,7 +582,7 @@ public class IntegrationTest {
                 "В таблице test нет строки с id: 77\n" +
                 "Введите команду:\n" +
                 //insert test
-                "Введите данные в формате: field1 newValue1 field2 newValue2 ... \n" +
+                "Введите данные в формате: columnName1 newValue1 columnName2 newValue2 ... \n" +
                 //id 1 name Vasya password pass1
                 "Строка добавлена\n" +
                 "Введите команду:\n" +
@@ -592,7 +592,7 @@ public class IntegrationTest {
                 "-------------------------\n" +
                 "|  1 | Vasya |    pass1 |\n" +
                 "-------------------------\n" +
-                "Введите данные к изменению в формате: field1 newValue1 field2 newValue2 ... \n" +
+                "Введите данные к изменению в формате: columnName1 newValue1 columnName2 newValue2 ... \n" +
                 //name
                 "Ошибка! Нечетное количество параметров\n" +
                 "Введите команду:\n" +

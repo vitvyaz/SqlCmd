@@ -31,7 +31,7 @@ public class Insert extends Command {
         String tableName = line.getWord(1);
         line.tableNameValidation(dbManager, tableName);
 
-        view.write("Введите данные в формате: field1 newValue1 field2 newValue2 ... ");
+        view.write("Введите данные в формате: columnName1 newValue1 columnName2 newValue2 ... ");
         String fieldsValues = view.read();
         fieldsValues = fieldsValues.replaceAll("\\s+", " ");
         String[] arrayFieldValues = fieldsValues.split(" ");

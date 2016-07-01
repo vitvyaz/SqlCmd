@@ -81,7 +81,7 @@ public class UpdateTest {
                         "| id |  name | password |\n" +
                         "-------------------------\n" +
                         "| 12 | Vasya |     1111 |\n" +
-                        "-------------------------, Введите данные к изменению в формате: field1 newValue1 field2 newValue2 ... ," +
+                        "-------------------------, Введите данные к изменению в формате: columnName1 newValue1 columnName2 newValue2 ... ," +
                         " Измененная строка:, " +
                         "------------------------\n" +
                         "| id | name | password |\n" +
@@ -120,7 +120,7 @@ public class UpdateTest {
                         "| id |  name | password |\n" +
                         "-------------------------\n" +
                         "| 12 | Vasya |     1111 |\n" +
-                        "-------------------------, Введите данные к изменению в формате: field1 newValue1 field2 newValue2 ... ]");
+                        "-------------------------, Введите данные к изменению в формате: columnName1 newValue1 columnName2 newValue2 ... ]");
     }
 
     @Test

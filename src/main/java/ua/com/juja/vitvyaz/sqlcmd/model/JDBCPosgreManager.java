@@ -132,6 +132,13 @@ public class JDBCPosgreManager implements DatabaseManager {
         String dataToUpdate = " SET (" + dataToChange.getNamesFormated(" %s,") + ") = "
                 + "(" + dataToChange.getValuesFormated(" '%s',") + ")";
 
+        String conditionToUpdate = getConditionString(condition);
+
+        String sql = "UPDATE " + tableName + dataToUpdate + conditionToUpdate;
+        execQuery(sql);
+    }
+
+    private String getConditionString(DataSet condition) {
         Set<String> conditionNames = condition.getNames();
         Iterator<String> iteratorNames = conditionNames.iterator();
         String conditionToUpdate = "";
@@ -144,9 +151,7 @@ public class JDBCPosgreManager implements DatabaseManager {
             name = iteratorNames.next();
             conditionToUpdate += " AND " + name + " = '" + condition.getValue(name) + "'";
         }
-
-        String sql = "UPDATE " + tableName + dataToUpdate + conditionToUpdate;
-        execQuery(sql);
+        return conditionToUpdate;
     }
 
     @Override
