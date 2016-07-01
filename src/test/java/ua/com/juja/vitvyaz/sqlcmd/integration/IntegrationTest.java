@@ -20,6 +20,10 @@ import static org.junit.Assert.assertEquals;
  */
 public class IntegrationTest {
 
+    private final static String DB_NAME = "sqlcmd";
+    private final static String DB_USER = "postgres";
+    private final static String DB_PASSWORD = "postgres";
+
     private static ConfigurableInputStream in;
     private static ByteArrayOutputStream out;
     private static Set<String> tables = new HashSet<>();
@@ -28,7 +32,7 @@ public class IntegrationTest {
     @BeforeClass
     public static void init() {
         DatabaseManager dbManager = new JDBCPosgreManager();
-        dbManager.connect("sqlcmd", "postgres", "postgres");
+        dbManager.connect(DB_NAME, DB_USER, DB_PASSWORD);
         dbManager.dropTable("test");
         tablesWithoutTableTest = dbManager.getTableNames();
         dbManager.createTable("test (id int PRIMARY KEY NOT NULL, name text, password text)");
@@ -78,9 +82,9 @@ public class IntegrationTest {
     @Test
     public void testConnectWrongUserPasswordAndExit() {
         //given
-        in.add("sqlcmd");
-        in.add("postgres");
-        in.add("postgre");
+        in.add(DB_NAME);
+        in.add(DB_USER);
+        in.add("wrong_password");
         in.add("no");
 
         //when
@@ -601,8 +605,8 @@ public class IntegrationTest {
     }
 
     private void connectToDB() {
-        in.add("sqlcmd");
-        in.add("postgres");
-        in.add("postgres");
+        in.add(DB_NAME);
+        in.add(DB_USER);
+        in.add(DB_PASSWORD);
     }
 }

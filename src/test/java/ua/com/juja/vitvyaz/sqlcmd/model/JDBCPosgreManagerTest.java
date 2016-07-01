@@ -15,13 +15,17 @@ import static org.junit.Assert.*;
  */
 public class JDBCPosgreManagerTest {
 
+    private final static String DB_NAME = "sqlcmd";
+    private final static String DB_USER = "postgres";
+    private final static String DB_PASSWORD = "postgres";
+
     private static Set<String> tablesWithoutTableTest = new HashSet<>();
     private JDBCPosgreManager dbManager;
 
     @BeforeClass
     public static void init() {
         DatabaseManager dbManager = new JDBCPosgreManager();
-        dbManager.connect("sqlcmd", "postgres", "postgres");
+        dbManager.connect(DB_NAME, DB_USER, DB_PASSWORD);
         dbManager.dropTable("test");
         tablesWithoutTableTest = dbManager.getTableNames();
         dbManager.createTable("test (id int PRIMARY KEY NOT NULL, name text, password text)");
@@ -30,6 +34,7 @@ public class JDBCPosgreManagerTest {
     @Before
     public void setup() {
         dbManager = new JDBCPosgreManager();
+        dbManager.connect(DB_NAME, DB_USER, DB_PASSWORD);
     }
 
     @Test
@@ -83,7 +88,6 @@ public class JDBCPosgreManagerTest {
     }
 
     private void addRows() {
-        dbManager.connect("sqlcmd", "postgres", "postgres");
         dbManager.clearTable("test");
         DataSet rowToAdd = new DataSet();
         for (int i = 0; i < 7; i++) {
@@ -96,7 +100,6 @@ public class JDBCPosgreManagerTest {
 
     @Test
     public void testGetTableDataWrongTableName() {
-        dbManager.connect("sqlcmd", "postgres", "postgres");
         try  {
             List<DataSet> data = dbManager.getTableData("wrongtable");
         } catch (Exception e) {
@@ -106,7 +109,6 @@ public class JDBCPosgreManagerTest {
 
     @Test
     public void testGetTableDataEmptyTable() {
-        dbManager.connect("sqlcmd", "postgres", "postgres");
         dbManager.clearTable("test");
         List<DataSet> data = dbManager.getTableData("test");
         assertEquals("[]", data.toString());
@@ -114,14 +116,12 @@ public class JDBCPosgreManagerTest {
 
     @Test
     public void testGetTableColumns() {
-        dbManager.connect("sqlcmd", "postgres", "postgres");
         Set<String> tableColumns = dbManager.getTableColumns("test");
         assertEquals("[id, name, password]", tableColumns.toString());
     }
 
     @Test
     public void testGetTableColumnsWrongTableName() {
-        dbManager.connect("sqlcmd", "postgres", "postgres");
         try {
             Set<String> tableColumns = dbManager.getTableColumns("wrongtable");
         } catch (IllegalArgumentException e) {
@@ -131,7 +131,7 @@ public class JDBCPosgreManagerTest {
 
     @Test
     public void testClearTable() {
-        connectAndClearTableTest();
+        dbManager.clearTable("test");
 
         DataSet rowToAdd = new DataSet();
         rowToAdd.add("id", 13);
@@ -147,7 +147,6 @@ public class JDBCPosgreManagerTest {
 
     @Test
     public void testClearTableWrongTableName() {
-        dbManager.connect("sqlcmd", "postgres", "postgres");
         try {
             dbManager.clearTable("wrongtable");
             fail();
@@ -158,33 +157,30 @@ public class JDBCPosgreManagerTest {
 
     @Test
     public void testDisconect() {
-        dbManager.connect("sqlcmd", "postgres", "postgres");
         dbManager.disconnect();
         assertFalse(dbManager.isConnected());
     }
 
     @Test
     public void testIsTableExist() {
-        dbManager.connect("sqlcmd", "postgres", "postgres");
         assertTrue(dbManager.existTable("test"));
     }
 
     @Test
     public void testIsTableExistWrongTableName() {
-        dbManager.connect("sqlcmd", "postgres", "postgres");
         assertFalse(dbManager.existTable("wrongtable"));
     }
 
     @Test
     public void testIsTableExistEmptyTableName() {
-        dbManager.connect("sqlcmd", "postgres", "postgres");
         assertFalse(dbManager.existTable(""));
     }
 
     @Test
     public void testConnectWrongPassword() {
+        dbManager.disconnect();
         try {
-            dbManager.connect("sqlcmd", "postgres", "wrongPassword");
+            dbManager.connect(DB_NAME, DB_USER, "wrongPassword");
             fail();
         } catch (Exception e) {
             assertEquals("Не удается подключиться к базе данных: sqlcmd имя пользователя: postgres", e.getMessage());
@@ -193,8 +189,9 @@ public class JDBCPosgreManagerTest {
 
     @Test
     public void testConnectWrongUser() {
+        dbManager.disconnect();
         try {
-            dbManager.connect("sqlcmd", "wronguser", "postgres");
+            dbManager.connect(DB_NAME, "wronguser", DB_PASSWORD);
             fail();
         } catch (RuntimeException e) {
             assertEquals("Не удается подключиться к базе данных: sqlcmd имя пользователя: wronguser", e.getMessage());
@@ -203,29 +200,29 @@ public class JDBCPosgreManagerTest {
 
     @Test
     public void testConnectWrongDatabase() {
+        dbManager.disconnect();
         try {
-            dbManager.connect("sqlcmd1", "postgres", "postgres");
+            dbManager.connect("wrongdatabase", DB_USER, DB_PASSWORD);
             fail();
         } catch (RuntimeException e) {
-            assertEquals("Не удается подключиться к базе данных: sqlcmd1 имя пользователя: postgres", e.getMessage());
+            assertEquals("Не удается подключиться к базе данных: wrongdatabase имя пользователя: postgres", e.getMessage());
         }
     }
 
     @Test
     public void testIsConnectedWhenConnect() {
-        dbManager.connect("sqlcmd", "postgres", "postgres");
         assertTrue(dbManager.isConnected());
     }
 
     @Test
     public void testIsConnectedWhenNotConnect() {
+        dbManager.disconnect();
         assertFalse(dbManager.isConnected());
     }
 
 
     @Test
     public void testGetAllTableNames() {
-        dbManager.connect("sqlcmd", "postgres", "postgres");
         Set<String> expectedTableNames = new HashSet<>(tablesWithoutTableTest);
         expectedTableNames.add("test");
         assertEquals(expectedTableNames.toString(),dbManager.getTableNames().toString());
@@ -234,7 +231,7 @@ public class JDBCPosgreManagerTest {
     @Test
     public void testUpdateTableDataTwoCondition() {
         // given
-        connectAndClearTableTest();
+        dbManager.clearTable("test");
 
         // when
         DataSet input = new DataSet();
@@ -263,7 +260,7 @@ public class JDBCPosgreManagerTest {
     @Test
     public void testUpdateTableData() {
         // given
-        connectAndClearTableTest();
+        dbManager.clearTable("test");
 
         // when
         DataSet input = new DataSet();
@@ -291,7 +288,7 @@ public class JDBCPosgreManagerTest {
     @Test
     public void testInsertTableData() {
         // given
-        connectAndClearTableTest();
+        dbManager.clearTable("test");
 
         // when
         DataSet input = new DataSet();
@@ -319,8 +316,4 @@ public class JDBCPosgreManagerTest {
         assertEquals(13, data.size());
     }
 
-    private void connectAndClearTableTest() {
-        dbManager.connect("sqlcmd", "postgres", "postgres");
-        dbManager.clearTable("test");
-    }
 }
