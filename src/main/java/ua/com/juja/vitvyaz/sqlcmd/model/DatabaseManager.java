@@ -34,6 +34,6 @@ public interface DatabaseManager {
 
     boolean isConnected();
 
-    boolean isTableExist(String tableName);
+    boolean existTable(String tableName);
 
 }

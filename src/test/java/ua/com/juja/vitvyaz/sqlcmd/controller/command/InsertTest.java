@@ -2,9 +2,7 @@ package ua.com.juja.vitvyaz.sqlcmd.controller.command;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import ua.com.juja.vitvyaz.sqlcmd.controller.command.util.InputLine;
-import ua.com.juja.vitvyaz.sqlcmd.model.DataSet;
 import ua.com.juja.vitvyaz.sqlcmd.model.DatabaseManager;
 import ua.com.juja.vitvyaz.sqlcmd.view.View;
 
@@ -58,7 +56,7 @@ public class InsertTest {
     public void testInsertRowData() {
         //given
         when(view.read()).thenReturn("id 1 name Ivan password *****");
-        when(dbManager.isTableExist("users")).thenReturn(true);
+        when(dbManager.existTable("users")).thenReturn(true);
 
         //when
         InputLine input = new InputLine("insert users");
@@ -74,7 +72,7 @@ public class InsertTest {
     public void testInsertRowDataErrorNotPairParameters() {
         //given
         when(view.read()).thenReturn("id 1 name Ivan password");
-        when(dbManager.isTableExist("users")).thenReturn(true);
+        when(dbManager.existTable("users")).thenReturn(true);
 
         //when
         InputLine input = new InputLine("insert users");
@@ -123,7 +121,7 @@ public class InsertTest {
     public void testFindWithWrongTableName() {
         //given
 
-        when(dbManager.isTableExist("wrongTableName")).thenReturn(false);
+        when(dbManager.existTable("wrongTableName")).thenReturn(false);
         Set<String> tableNames = new HashSet<>();
         tableNames.add("test");
         tableNames.add("users");

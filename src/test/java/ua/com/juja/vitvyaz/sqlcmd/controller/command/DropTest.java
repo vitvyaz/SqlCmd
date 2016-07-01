@@ -55,7 +55,7 @@ public class DropTest {
     public void testDropTableUsersConfirmed() {
         //given
         when(view.read()).thenReturn("yes");
-        when(dbManager.isTableExist("users")).thenReturn(true);
+        when(dbManager.existTable("users")).thenReturn(true);
 
         //when
         InputLine input = new InputLine("drop users");
@@ -71,7 +71,7 @@ public class DropTest {
     public void testDropTableUsersNotConfirmed() {
         //given
         when(view.read()).thenReturn("no");
-        when(dbManager.isTableExist("users")).thenReturn(true);
+        when(dbManager.existTable("users")).thenReturn(true);
 
         //when
         InputLine input = new InputLine("drop users");
@@ -87,7 +87,7 @@ public class DropTest {
     public void testDropWrongTableName() {
         //given
         when(view.read()).thenReturn("yes");
-        when(dbManager.isTableExist("wrongTableName")).thenReturn(false);
+        when(dbManager.existTable("wrongTableName")).thenReturn(false);
         Set<String> tableNames = new HashSet<>();
         tableNames.add("test");
         tableNames.add("users");

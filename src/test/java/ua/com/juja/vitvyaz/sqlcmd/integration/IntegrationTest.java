@@ -12,7 +12,6 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 import static org.junit.Assert.assertEquals;
 
@@ -21,8 +20,9 @@ import static org.junit.Assert.assertEquals;
  */
 public class IntegrationTest {
 
-    private static ConfigurabeInputStream in;
+    private static ConfigurableInputStream in;
     private static ByteArrayOutputStream out;
+    private static Set<String> tables = new HashSet<>();
     private static Set<String> tablesWithoutTableTest = new HashSet<>();
 
     @BeforeClass
@@ -32,11 +32,12 @@ public class IntegrationTest {
         dbManager.dropTable("test");
         tablesWithoutTableTest = dbManager.getTableNames();
         dbManager.createTable("test (id int PRIMARY KEY NOT NULL, name text, password text)");
+        tables = dbManager.getTableNames();
     }
 
     @Before
     public void setup() {
-        in = new ConfigurabeInputStream();
+        in = new ConfigurableInputStream();
         out = new ByteArrayOutputStream();
 
         System.setIn(in);
@@ -53,7 +54,7 @@ public class IntegrationTest {
         Main.main(new String[0]);
 
         //then
-        assertEquals("Введите название базы данных(sqlcmd): \n" +
+        assertEquals("Введите название базы данных: \n" +
                 //sqlcmd
                 "Введите имя пользователя: \n" +
                 //postgres
@@ -86,7 +87,7 @@ public class IntegrationTest {
         Main.main(new String[0]);
 
         //then
-        assertEquals("Введите название базы данных(sqlcmd): \n" +
+        assertEquals("Введите название базы данных: \n" +
                 //sqlcmd
                 "Введите имя пользователя: \n" +
                 //postgres
@@ -115,7 +116,7 @@ public class IntegrationTest {
         Main.main(new String[0]);
 
         //then
-        assertEquals("Введите название базы данных(sqlcmd): \n" +
+        assertEquals("Введите название базы данных: \n" +
                 //sqlcmd
                 "Введите имя пользователя: \n" +
                 //postgres
@@ -158,7 +159,7 @@ public class IntegrationTest {
         Main.main(new String[0]);
 
         //then
-        assertEquals("Введите название базы данных(sqlcmd): \n" +
+        assertEquals("Введите название базы данных: \n" +
                 //sqlcmd
                 "Введите имя пользователя: \n" +
                 //postgres
@@ -191,7 +192,7 @@ public class IntegrationTest {
         Main.main(new String[0]);
 
         //then
-        assertEquals("Введите название базы данных(sqlcmd): \n" +
+        assertEquals("Введите название базы данных: \n" +
                 //sqlcmd
                 "Введите имя пользователя: \n" +
                 //postgres
@@ -204,7 +205,7 @@ public class IntegrationTest {
                 "Введите команду:\n" +
                 //clear wrongtablename
                 "Ошибка! Нет такой таблицы. Доступны таблицы:\n" +
-                "[test, users]\n" +
+                tables.toString() + "\n" +
                 "Введите команду:\n" +
                 //exit
                 "До свидания!\n", getData());
@@ -222,7 +223,7 @@ public class IntegrationTest {
         Main.main(new String[0]);
 
         //then
-        assertEquals("Введите название базы данных(sqlcmd): \n" +
+        assertEquals("Введите название базы данных: \n" +
                 //sqlcmd
                 "Введите имя пользователя: \n" +
                 //postgres
@@ -235,7 +236,7 @@ public class IntegrationTest {
                 "Введите команду:\n" +
                 //drop wrongtablename
                 "Ошибка! Нет такой таблицы. Доступны таблицы:\n" +
-                "[test, users]\n" +
+                tables.toString() + "\n" +
                 "Введите команду:\n" +
                 //exit
                 "До свидания!\n", getData());
@@ -259,7 +260,7 @@ public class IntegrationTest {
         Main.main(new String[0]);
 
         //then
-        assertEquals("Введите название базы данных(sqlcmd): \n" +
+        assertEquals("Введите название базы данных: \n" +
                 //sqlcmd
                 "Введите имя пользователя: \n" +
                 //postgres
@@ -313,7 +314,7 @@ public class IntegrationTest {
         Main.main(new String[0]);
 
         //then
-        assertEquals("Введите название базы данных(sqlcmd): \n" +
+        assertEquals("Введите название базы данных: \n" +
                 //sqlcmd
                 "Введите имя пользователя: \n" +
                 //postgres
@@ -326,7 +327,7 @@ public class IntegrationTest {
                 "Введите команду:\n" +
                 //find wrongtablename
                 "Ошибка! Нет такой таблицы. Доступны таблицы:\n" +
-                "[test, users]\n" +
+                tables.toString() + "\n" +
                 "Введите команду:\n" +
                 //exit
                 "До свидания!\n", getData());
@@ -343,7 +344,7 @@ public class IntegrationTest {
         Main.main(new String[0]);
 
         //then
-        assertEquals("Введите название базы данных(sqlcmd): \n" +
+        assertEquals("Введите название базы данных: \n" +
                 //sqlcmd
                 "Введите имя пользователя: \n" +
                 //postgres
@@ -391,7 +392,7 @@ public class IntegrationTest {
         Main.main(new String[0]);
 
         //then
-        assertEquals("Введите название базы данных(sqlcmd): \n" +
+        assertEquals("Введите название базы данных: \n" +
                 //sqlcmd
                 "Введите имя пользователя: \n" +
                 //postgres
@@ -404,7 +405,7 @@ public class IntegrationTest {
                 "Введите команду:\n" +
                 //insert wrongtablename
                 "Ошибка! Нет такой таблицы. Доступны таблицы:\n" +
-                "[test, users]\n" +
+                tables.toString() + "\n" +
                 "Введите команду:\n" +
                 //insert test
                 "Введите данные в формате: field1 newValue1 field2 newValue2 ... \n" +
@@ -428,7 +429,7 @@ public class IntegrationTest {
         Main.main(new String[0]);
 
         //then
-        assertEquals("Введите название базы данных(sqlcmd): \n" +
+        assertEquals("Введите название базы данных: \n" +
                 //sqlcmd
                 "Введите имя пользователя: \n" +
                 //postgres
@@ -453,7 +454,7 @@ public class IntegrationTest {
         Main.main(new String[0]);
 
         //then
-        assertEquals("Введите название базы данных(sqlcmd): \n" +
+        assertEquals("Введите название базы данных: \n" +
                 //sqlcmd
                 "Введите имя пользователя: \n" +
                 //postgres
@@ -487,7 +488,7 @@ public class IntegrationTest {
         Main.main(new String[0]);
 
         //then
-        assertEquals("Введите название базы данных(sqlcmd): \n" +
+        assertEquals("Введите название базы данных: \n" +
                 //sqlcmd
                 "Введите имя пользователя: \n" +
                 //postgres
@@ -562,7 +563,7 @@ public class IntegrationTest {
         Main.main(new String[0]);
 
         //then
-        assertEquals("Введите название базы данных(sqlcmd): \n" +
+        assertEquals("Введите название базы данных: \n" +
                 //sqlcmd
                 "Введите имя пользователя: \n" +
                 //postgres
@@ -575,7 +576,7 @@ public class IntegrationTest {
                 "Введите команду:\n" +
                 //update wrongtablename 1
                 "Ошибка! Нет такой таблицы. Доступны таблицы:\n" +
-                "[test, users]\n" +
+                tables.toString() + "\n" +
                 "Введите команду:\n" +
                 //update test 77
                 "В таблице test нет строки с id: 77\n" +

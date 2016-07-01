@@ -27,7 +27,7 @@ public abstract class Command {
 
     public abstract void process(InputLine line);
 
-    public String getDescrition() {
+    public String getDescription() {
         return description;
     }
 

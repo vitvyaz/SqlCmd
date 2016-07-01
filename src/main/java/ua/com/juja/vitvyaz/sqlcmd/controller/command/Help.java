@@ -25,8 +25,8 @@ public class Help extends Command {
     public void process(InputLine line) {
         view.write("Существующие команды:");
         for (Command item: commands) {
-            if(item.description != null) {
-                view.write(item.description);
+            if(item.getDescription() != null) {
+                view.write(item.getDescription());
             }
         }
     }

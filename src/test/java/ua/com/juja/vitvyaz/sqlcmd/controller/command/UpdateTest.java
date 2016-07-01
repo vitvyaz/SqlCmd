@@ -8,8 +8,6 @@ import ua.com.juja.vitvyaz.sqlcmd.model.DataSet;
 import ua.com.juja.vitvyaz.sqlcmd.model.DatabaseManager;
 import ua.com.juja.vitvyaz.sqlcmd.view.View;
 
-import java.util.ArrayList;
-
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -68,7 +66,7 @@ public class UpdateTest {
 
         when(dbManager.getRow("users", "12")).thenReturn(currentRow).thenReturn(changedRow);
 
-        when(dbManager.isTableExist("users")).thenReturn(true);
+        when(dbManager.existTable("users")).thenReturn(true);
 
         when(view.read()).thenReturn("name Ivan password *****");
 
@@ -102,7 +100,7 @@ public class UpdateTest {
 
         when(dbManager.getRow("users", "12")).thenReturn(currentRow);
 
-        when(dbManager.isTableExist("users")).thenReturn(true);
+        when(dbManager.existTable("users")).thenReturn(true);
 
         when(view.read()).thenReturn("name Ivan password");
 
@@ -129,7 +127,7 @@ public class UpdateTest {
     public void testUpdateErrorRowIdNotExist() {
         //given
         when(dbManager.getRow("users", "99")).thenReturn(new DataSet());
-        when(dbManager.isTableExist("users")).thenReturn(true);
+        when(dbManager.existTable("users")).thenReturn(true);
 
         //when
         InputLine input = new InputLine("update users 99");

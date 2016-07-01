@@ -58,7 +58,7 @@ public class MainController {
 
     public boolean connectDB() {
         while (!dbManager.isConnected()) {
-            view.write("Введите название базы данных(sqlcmd): ");
+            view.write("Введите название базы данных: ");
             String dbName = view.read();
             view.write("Введите имя пользователя: ");
             String userName = view.read();

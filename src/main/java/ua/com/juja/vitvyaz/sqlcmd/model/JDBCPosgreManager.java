@@ -86,7 +86,7 @@ public class JDBCPosgreManager implements DatabaseManager {
     }
 
     @Override
-    public boolean isTableExist(String tableName) {
+    public boolean existTable(String tableName) {
         Set<String> tableNames = getTableNames();
         for (String item : tableNames) {
             if (item.equals(tableName)) {
@@ -151,7 +151,7 @@ public class JDBCPosgreManager implements DatabaseManager {
 
     @Override
     public Set<String> getTableColumns(String tableName) {
-        if (!isTableExist(tableName)) {
+        if (!existTable(tableName)) {
             throw new IllegalArgumentException("Ошибка! Нет таблицы с именем: " + tableName);
         }
         Set<String> result = new LinkedHashSet<>();

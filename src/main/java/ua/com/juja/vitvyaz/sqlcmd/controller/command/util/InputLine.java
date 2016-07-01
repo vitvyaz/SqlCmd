@@ -35,7 +35,7 @@ public class InputLine {
     }
 
     public void tableNameValidation(DatabaseManager dbManager, String tableName) {
-        if (!dbManager.isTableExist(tableName)) {
+        if (!dbManager.existTable(tableName)) {
             throw new IllegalArgumentException("Ошибка! Нет такой таблицы. Доступны таблицы:\n" +
                     dbManager.getTableNames().toString());
         }

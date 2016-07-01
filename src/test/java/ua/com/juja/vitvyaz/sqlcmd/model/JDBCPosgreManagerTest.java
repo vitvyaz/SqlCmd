@@ -7,7 +7,6 @@ import org.junit.Test;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import static org.junit.Assert.*;
 
@@ -167,19 +166,19 @@ public class JDBCPosgreManagerTest {
     @Test
     public void testIsTableExist() {
         dbManager.connect("sqlcmd", "postgres", "postgres");
-        assertTrue(dbManager.isTableExist("test"));
+        assertTrue(dbManager.existTable("test"));
     }
 
     @Test
     public void testIsTableExistWrongTableName() {
         dbManager.connect("sqlcmd", "postgres", "postgres");
-        assertFalse(dbManager.isTableExist("wrongtable"));
+        assertFalse(dbManager.existTable("wrongtable"));
     }
 
     @Test
     public void testIsTableExistEmptyTableName() {
         dbManager.connect("sqlcmd", "postgres", "postgres");
-        assertFalse(dbManager.isTableExist(""));
+        assertFalse(dbManager.existTable(""));
     }
 
     @Test

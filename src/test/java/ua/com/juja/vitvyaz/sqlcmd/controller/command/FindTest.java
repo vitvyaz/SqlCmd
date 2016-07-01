@@ -55,7 +55,7 @@ public class FindTest {
         tableColumns.add("password");
         when(dbManager.getTableColumns("users")).thenReturn(tableColumns);
 
-        when(dbManager.isTableExist("users")).thenReturn(true);
+        when(dbManager.existTable("users")).thenReturn(true);
 
         //when
         InputLine input = new InputLine("find users");
@@ -113,7 +113,7 @@ public class FindTest {
         tableColumns.add("password");
         when(dbManager.getTableColumns("users")).thenReturn(tableColumns);
 
-        when(dbManager.isTableExist("users")).thenReturn(true);
+        when(dbManager.existTable("users")).thenReturn(true);
 
         //when
         InputLine input = new InputLine("find users");
@@ -148,7 +148,7 @@ public class FindTest {
         tableColumns.add("password");
         when(dbManager.getTableColumns("users")).thenReturn(tableColumns);
 
-        when(dbManager.isTableExist("users")).thenReturn(true);
+        when(dbManager.existTable("users")).thenReturn(true);
 
         //when
         InputLine input = new InputLine("find users 2 2");
@@ -198,7 +198,7 @@ public class FindTest {
     public void testFindWithWrongTableName() {
         //given
 
-        when(dbManager.isTableExist("wrongTableName")).thenReturn(false);
+        when(dbManager.existTable("wrongTableName")).thenReturn(false);
         Set<String> tableNames = new HashSet<>();
         tableNames.add("test");
         tableNames.add("users");

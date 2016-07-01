@@ -6,7 +6,7 @@ import java.io.InputStream;
 /**
  * Created by Vitalii Viazovoi on 16.04.2016.
  */
-public class ConfigurabeInputStream extends InputStream {
+public class ConfigurableInputStream extends InputStream {
 
     private String line;
 
