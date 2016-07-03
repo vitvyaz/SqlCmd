@@ -11,6 +11,7 @@ import ua.com.juja.vitvyaz.sqlcmd.view.View;
  */
 public class Main {
     public static void main(String[] args) {
+
         DatabaseManager dbManager = new JDBCPosgreManager();
         View view = new Console();
 

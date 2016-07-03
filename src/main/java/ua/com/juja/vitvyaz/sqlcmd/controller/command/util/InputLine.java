@@ -6,19 +6,19 @@ import ua.com.juja.vitvyaz.sqlcmd.model.DatabaseManager;
  * Created by Vitalii Viazovoi on 08.05.2016.
  */
 public class InputLine {
-    private String[] wordsArray;
+    private String[] words;
 
     public InputLine(String line) {
         line = line.replaceAll("\\s+", " ");
-        wordsArray = line.split(" ");
+        words = line.split(" ");
     }
 
     public String getWord(int i) {
-        return wordsArray[i];
+        return words[i];
     }
 
     public int countWords() {
-        return wordsArray.length;
+        return words.length;
     }
 
     public void parametersNumberValidation(String[] formats) {
