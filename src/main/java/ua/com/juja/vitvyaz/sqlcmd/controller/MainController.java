@@ -37,9 +37,10 @@ public class MainController {
             return;
         }
 
-        while (true) {
+        InputLine input;
+        do {
             view.write("Введите команду:");
-            InputLine input = new InputLine(view.read());
+            input = new InputLine(view.read());
             for (Command command : commands) {
                 if (command.canProcess(input)) {
                     try {
@@ -50,10 +51,7 @@ public class MainController {
                     break;
                 }
             }
-            if (input.getWord(0).equals("exit")) {
-                return;
-            }
-        }
+        } while (!input.getWord(0).equals("exit"));
     }
 
     public boolean connectDB() {
