@@ -1,8 +1,10 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
     <head>
         <title>SQLCmd</title>
     </head>
     <body>
-        Can't load this page. You can go to <a href="menu">Menu</a><br>
+        Error! ${message}<br>
+        <a href="menu">menu</a><br>
     </body>
 </html>
