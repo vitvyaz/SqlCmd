@@ -1,5 +1,8 @@
 package ua.com.juja.vitvyaz.sqlcmd.controller.web;
 
+import ua.com.juja.vitvyaz.sqlcmd.service.Service;
+import ua.com.juja.vitvyaz.sqlcmd.service.ServiceImpl;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,10 +16,13 @@ public class MainServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Service service = new ServiceImpl();
+
         String requestURI = req.getRequestURI();
         String action = requestURI.substring(req.getContextPath().length(), requestURI.length());
 
         if (action.equals("/menu") || action.equals("/")) {
+            req.setAttribute("items", service.commandsList());
             req.getRequestDispatcher("menu.jsp").forward(req, resp);
         } else if (action.startsWith("/help")) {
             req.getRequestDispatcher("help.jsp").forward(req, resp);

@@ -4,6 +4,6 @@
     </head>
     <body>
         Hi word!<br>
-        This is the hepl page<br>
+        This is the help page<br>
     </body>
 </html>
