@@ -1,5 +1,6 @@
 package ua.com.juja.vitvyaz.sqlcmd.controller.web;
 
+import ua.com.juja.vitvyaz.sqlcmd.model.DatabaseManager;
 import ua.com.juja.vitvyaz.sqlcmd.service.Service;
 import ua.com.juja.vitvyaz.sqlcmd.service.ServiceImpl;
 
@@ -26,13 +27,30 @@ public class MainServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = getAction(req);
 
+        if (action.startsWith("/connect")) {
+            req.getRequestDispatcher("connect.jsp").forward(req, resp);
+            return;
+        }
+
+        DatabaseManager dbManager = (DatabaseManager) req.getSession().getAttribute("db_manager");
+
+        if (dbManager == null) {
+            resp.sendRedirect(resp.encodeRedirectURL("connect"));
+            return;
+        }
+
         if (action.equals("/menu") || action.equals("/")) {
             req.setAttribute("items", service.commandsList());
             req.getRequestDispatcher("menu.jsp").forward(req, resp);
+
         } else if (action.startsWith("/help")) {
             req.getRequestDispatcher("help.jsp").forward(req, resp);
-        } else if (action.startsWith("/connect")) {
-            req.getRequestDispatcher("connect.jsp").forward(req, resp);
+
+        } else if (action.startsWith("/find")) {
+            String tableName = req.getParameter("table");
+            req.setAttribute("table", service.find(dbManager, tableName));
+            req.getRequestDispatcher("find.jsp").forward(req, resp);
+
         } else {
             req.getRequestDispatcher("error.jsp").forward(req, resp);
         }
@@ -47,7 +65,8 @@ public class MainServlet extends HttpServlet {
             String userName = req.getParameter("username");
             String password = req.getParameter("password");
             try {
-                service.connect(databaseName, userName, password);
+                DatabaseManager dbManager = service.connect(databaseName, userName, password);
+                req.getSession().setAttribute("db_manager", dbManager);
                 resp.sendRedirect(resp.encodeRedirectURL("menu"));
             } catch (Exception e) {
                 req.setAttribute("message", e.getMessage());

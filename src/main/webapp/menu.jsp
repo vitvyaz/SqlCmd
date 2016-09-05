@@ -6,7 +6,6 @@
     <body>
         <c:forEach items="${items}" var="item">
             <a href="${item}">${item}</a><br>
-        <td>${element.getStatus()}</td>
         </c:forEach>
     </body>
 </html>

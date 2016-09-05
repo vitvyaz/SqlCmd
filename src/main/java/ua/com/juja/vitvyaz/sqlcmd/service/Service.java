@@ -1,5 +1,6 @@
 package ua.com.juja.vitvyaz.sqlcmd.service;
 
+import ua.com.juja.vitvyaz.sqlcmd.model.DatabaseManager;
 import java.util.List;
 
 /**
@@ -8,5 +9,7 @@ import java.util.List;
 public interface Service {
     List<String> commandsList();
 
-    void connect(String databaseName, String userName, String password);
+    DatabaseManager connect(String databaseName, String userName, String password);
+
+    List<List<String>> find(DatabaseManager manager, String tableName);
 }
