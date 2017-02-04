@@ -4,10 +4,7 @@ import ua.com.juja.vitvyaz.sqlcmd.model.DataSet;
 import ua.com.juja.vitvyaz.sqlcmd.model.DatabaseManager;
 import ua.com.juja.vitvyaz.sqlcmd.model.JDBCPosgreManager;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Виталий on 27.08.2016.
@@ -16,7 +13,7 @@ public class ServiceImpl implements Service {
 
     @Override
     public List<String> commandsList() {
-        return Arrays.asList("help", "connect", "menu", "find");
+        return Arrays.asList("help", "connect", "menu", "find", "tables", "create");
     }
 
     @Override
@@ -43,4 +40,11 @@ public class ServiceImpl implements Service {
         }
         return result;
     }
+
+    @Override
+    public Set<String> tables(DatabaseManager manager) {
+        return manager.getTableNames();
+    }
+
+
 }

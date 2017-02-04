@@ -51,6 +51,13 @@ public class MainServlet extends HttpServlet {
             req.setAttribute("table", service.find(dbManager, tableName));
             req.getRequestDispatcher("find.jsp").forward(req, resp);
 
+        } else if (action.startsWith("/tables")) {
+            req.setAttribute("tables", service.tables(dbManager));
+            req.getRequestDispatcher("tables.jsp").forward(req, resp);
+
+        } else if (action.startsWith("/create")) {
+            req.getRequestDispatcher("create.jsp").forward(req, resp);
+
         } else {
             req.getRequestDispatcher("error.jsp").forward(req, resp);
         }
@@ -66,6 +73,19 @@ public class MainServlet extends HttpServlet {
             String password = req.getParameter("password");
             try {
                 DatabaseManager dbManager = service.connect(databaseName, userName, password);
+                req.getSession().setAttribute("db_manager", dbManager);
+                resp.sendRedirect(resp.encodeRedirectURL("menu"));
+            } catch (Exception e) {
+                req.setAttribute("message", e.getMessage());
+                req.getRequestDispatcher("error.jsp").forward(req, resp);
+            }
+
+        } else if (action.equals("/create")) {
+            DatabaseManager dbManager = (DatabaseManager) req.getSession().getAttribute("db_manager");
+
+            try {
+                String query = req.getParameter("query");
+                dbManager.createTable(query);
                 req.getSession().setAttribute("db_manager", dbManager);
                 resp.sendRedirect(resp.encodeRedirectURL("menu"));
             } catch (Exception e) {
