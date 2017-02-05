@@ -4,10 +4,11 @@
         <title>SQLCmd</title>
     </head>
     <body>
+        <b>Tables:</b><br>
         <table border="1">
-            <c:forEach items="${tables}" var="row">
+            <c:forEach items="${tables}" var="item">
                 <tr>
-                    <td>${row}</td>
+                    <td><a href="find?table=${item}">${item}</a></td>
                 </tr>
             </c:forEach>
         </table>
