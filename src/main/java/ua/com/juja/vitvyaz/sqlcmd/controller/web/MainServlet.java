@@ -48,7 +48,7 @@ public class MainServlet extends HttpServlet {
 
         } else if (action.startsWith("/find")) {
             String tableName = req.getParameter("table");
-            req.setAttribute("table", service.find(dbManager, tableName));
+            req.setAttribute("data", service.find(dbManager, tableName));
             req.getRequestDispatcher("find.jsp").forward(req, resp);
 
         } else if (action.startsWith("/tables")) {
@@ -57,6 +57,11 @@ public class MainServlet extends HttpServlet {
 
         } else if (action.startsWith("/create")) {
             req.getRequestDispatcher("create.jsp").forward(req, resp);
+
+        } else if (action.startsWith("/insert")) {
+            String tableName = req.getParameter("table");
+            req.setAttribute("columns", service.columns(dbManager, tableName));
+            req.getRequestDispatcher("insert.jsp").forward(req, resp);
 
         } else {
             req.getRequestDispatcher("error.jsp").forward(req, resp);

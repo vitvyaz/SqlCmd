@@ -5,7 +5,9 @@
     </head>
     <body>
         <table border="1">
-            <c:forEach items="${table}" var="row">
+            <a href="insert?table=<%= request.getParameter("table") %>">insert</a><br>
+            <b>Table: <%= request.getParameter("table") %></b>
+            <c:forEach items="${data}" var="row">
                 <tr>
                 <c:forEach items="${row}" var="element">
                     <td>${element}</td>

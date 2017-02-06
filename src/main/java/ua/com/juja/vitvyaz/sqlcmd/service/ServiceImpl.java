@@ -42,8 +42,13 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public Set<String> tables(DatabaseManager manager) {
-        return manager.getTableNames();
+    public Set<String> tables(DatabaseManager dbManager) {
+        return dbManager.getTableNames();
+    }
+
+    @Override
+    public List<String> columns(DatabaseManager dbManager, String tableName) {
+        return new ArrayList<>(dbManager.getTableColumns(tableName));
     }
 
 

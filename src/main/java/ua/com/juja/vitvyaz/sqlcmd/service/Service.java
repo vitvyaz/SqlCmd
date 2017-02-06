@@ -15,4 +15,6 @@ public interface Service {
     List<List<String>> find(DatabaseManager manager, String tableName);
 
     Set<String> tables(DatabaseManager manager);
+
+    List<String> columns(DatabaseManager manager, String tableName);
 }
