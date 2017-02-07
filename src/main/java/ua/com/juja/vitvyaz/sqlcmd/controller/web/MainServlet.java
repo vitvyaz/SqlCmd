@@ -1,5 +1,6 @@
 package ua.com.juja.vitvyaz.sqlcmd.controller.web;
 
+import ua.com.juja.vitvyaz.sqlcmd.model.DataSet;
 import ua.com.juja.vitvyaz.sqlcmd.model.DatabaseManager;
 import ua.com.juja.vitvyaz.sqlcmd.service.Service;
 import ua.com.juja.vitvyaz.sqlcmd.service.ServiceImpl;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by Виталий on 24.08.2016.
@@ -60,6 +62,7 @@ public class MainServlet extends HttpServlet {
 
         } else if (action.startsWith("/insert")) {
             String tableName = req.getParameter("table");
+            req.getSession().setAttribute("table", tableName);
             req.setAttribute("columns", service.columns(dbManager, tableName));
             req.getRequestDispatcher("insert.jsp").forward(req, resp);
 
@@ -91,8 +94,24 @@ public class MainServlet extends HttpServlet {
             try {
                 String query = req.getParameter("query");
                 dbManager.createTable(query);
-                req.getSession().setAttribute("db_manager", dbManager);
                 resp.sendRedirect(resp.encodeRedirectURL("menu"));
+            } catch (Exception e) {
+                req.setAttribute("message", e.getMessage());
+                req.getRequestDispatcher("error.jsp").forward(req, resp);
+            }
+
+        } else if (action.equals("/insert")) {
+            DatabaseManager dbManager = (DatabaseManager) req.getSession().getAttribute("db_manager");
+            String tableName = (String) req.getSession().getAttribute("table");
+            List<String> columns = service.columns(dbManager, tableName);
+            DataSet dataToChange = new DataSet();
+            try {
+                for (String comumn : columns) {
+                    String value = req.getParameter(comumn + "value");
+                    dataToChange.add(comumn, value);
+                }
+                dbManager.insertRow(tableName, dataToChange);
+                resp.sendRedirect(resp.encodeRedirectURL("find?table=" + tableName));
             } catch (Exception e) {
                 req.setAttribute("message", e.getMessage());
                 req.getRequestDispatcher("error.jsp").forward(req, resp);

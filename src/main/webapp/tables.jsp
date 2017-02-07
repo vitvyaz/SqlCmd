@@ -4,6 +4,8 @@
         <title>SQLCmd</title>
     </head>
     <body>
+        <a href="menu">menu</a>
+        <hr>
         <b>Tables:</b><br>
         <table border="1">
             <c:forEach items="${tables}" var="item">
