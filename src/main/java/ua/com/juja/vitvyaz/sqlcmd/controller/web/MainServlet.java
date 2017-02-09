@@ -66,6 +66,12 @@ public class MainServlet extends HttpServlet {
             req.setAttribute("columns", service.columns(dbManager, tableName));
             req.getRequestDispatcher("insert.jsp").forward(req, resp);
 
+        } else if (action.startsWith("/update")) {
+            String tableName = req.getParameter("table");
+            req.getSession().setAttribute("table", tableName);
+            req.setAttribute("columns", service.columns(dbManager, tableName));
+            req.getRequestDispatcher("update.jsp").forward(req, resp);
+
         } else {
             req.getRequestDispatcher("error.jsp").forward(req, resp);
         }

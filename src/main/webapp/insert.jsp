@@ -4,6 +4,8 @@
         <title>SQLCmd</title>
     </head>
     <body>
+        <a href="menu">menu</a><br>
+        <hr>
         <b>Insert row in table: <%= request.getParameter("table") %></b>
         <form action="insert" method="post">
             <table>
@@ -14,7 +16,7 @@
                     </tr>
                 </c:forEach>
                 <td></td>
-                <td><input type="submit" name="insert"/></td>
+                <td><input type="submit" value="insert" name="insert"/></td>
             </table>
          </form>
     </body>

@@ -5,8 +5,13 @@
     </head>
     <body>
         <table border="1">
-            <a href="insert?table=<%= request.getParameter("table") %>">insert</a><br>
+            <a href="insert?table=<%= request.getParameter("table") %>">insert</a>
+            &nbsp
+            <a href="update?table=<%= request.getParameter("table") %>">update</a>
+            &nbsp
+            <a href="menu">menu</a><br>
             <hr>
+
             <b>Table: <%= request.getParameter("table") %></b>
             <c:forEach items="${data}" var="row">
                 <tr>
