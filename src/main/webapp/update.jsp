@@ -18,18 +18,13 @@
             </table>
 
             <b>Conditions for update:</b><br>
-            <select name="column1">
+            <select name="condition_column">
                 <c:forEach items="${columns}" var="column">
-                    <option>column</option>
+                    <option>${column}</option>
                 </c:forEach>
             </select>
-            <select name="sing1">
-                <option>=</option>
-                <option><</option>
-                <option>></option>
-                <option><></option>
-            </select>
-            <input type="text" name="value1"/><br>
+            &nbsp = &nbsp
+            <input type="text" name="condition_value"/><br>
             <hr>
             <td><input type="submit" value="update" name="update"/></td>
          </form>

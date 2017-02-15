@@ -82,46 +82,82 @@ public class MainServlet extends HttpServlet {
         String action = getAction(req);
 
         if (action.equals("/connect")) {
-            String databaseName = req.getParameter("dbname");
-            String userName = req.getParameter("username");
-            String password = req.getParameter("password");
-            try {
-                DatabaseManager dbManager = service.connect(databaseName, userName, password);
-                req.getSession().setAttribute("db_manager", dbManager);
-                resp.sendRedirect(resp.encodeRedirectURL("menu"));
-            } catch (Exception e) {
-                req.setAttribute("message", e.getMessage());
-                req.getRequestDispatcher("error.jsp").forward(req, resp);
-            }
+            connect(req, resp);
 
         } else if (action.equals("/create")) {
-            DatabaseManager dbManager = (DatabaseManager) req.getSession().getAttribute("db_manager");
-
-            try {
-                String query = req.getParameter("query");
-                dbManager.createTable(query);
-                resp.sendRedirect(resp.encodeRedirectURL("menu"));
-            } catch (Exception e) {
-                req.setAttribute("message", e.getMessage());
-                req.getRequestDispatcher("error.jsp").forward(req, resp);
-            }
+            create(req, resp);
 
         } else if (action.equals("/insert")) {
-            DatabaseManager dbManager = (DatabaseManager) req.getSession().getAttribute("db_manager");
-            String tableName = (String) req.getSession().getAttribute("table");
-            List<String> columns = service.columns(dbManager, tableName);
-            DataSet dataToChange = new DataSet();
-            try {
-                for (String comumn : columns) {
-                    String value = req.getParameter(comumn + "value");
-                    dataToChange.add(comumn, value);
-                }
-                dbManager.insertRow(tableName, dataToChange);
-                resp.sendRedirect(resp.encodeRedirectURL("find?table=" + tableName));
-            } catch (Exception e) {
-                req.setAttribute("message", e.getMessage());
-                req.getRequestDispatcher("error.jsp").forward(req, resp);
-            }
+            insert(req, resp);
+
+        } else if (action.equals("/update")) {
+            update(req, resp);
+        }
+    }
+
+    private void update(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        DatabaseManager dbManager = (DatabaseManager) req.getSession().getAttribute("db_manager");
+        String tableName = (String) req.getSession().getAttribute("table");
+        List<String> columns = service.columns(dbManager, tableName);
+        DataSet dataToChange = new DataSet();
+        for (String column : columns) {
+            String value = req.getParameter(column + "value");
+            dataToChange.add(column, value);
+        }
+        DataSet condition = new DataSet();
+        condition.add(req.getParameter("condition_column"), req.getParameter("condition_value"));
+        try {
+            dbManager.update(tableName, dataToChange, condition);
+            resp.sendRedirect(resp.encodeRedirectURL("find?table=" + tableName));
+        } catch (Exception e) {
+            req.setAttribute("message", e.getMessage());
+            req.getRequestDispatcher("error.jsp").forward(req, resp);
+        }
+
+    }
+
+    private void insert(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        DatabaseManager dbManager = (DatabaseManager) req.getSession().getAttribute("db_manager");
+        String tableName = (String) req.getSession().getAttribute("table");
+        List<String> columns = service.columns(dbManager, tableName);
+        DataSet dataToInsert = new DataSet();
+        for (String column : columns) {
+            String value = req.getParameter(column + "value");
+            dataToInsert.add(column, value);
+        }
+        try {
+            dbManager.insertRow(tableName, dataToInsert);
+            resp.sendRedirect(resp.encodeRedirectURL("find?table=" + tableName));
+        } catch (Exception e) {
+            req.setAttribute("message", e.getMessage());
+            req.getRequestDispatcher("error.jsp").forward(req, resp);
+        }
+    }
+
+    private void create(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        DatabaseManager dbManager = (DatabaseManager) req.getSession().getAttribute("db_manager");
+
+        try {
+            String query = req.getParameter("query");
+            dbManager.createTable(query);
+            resp.sendRedirect(resp.encodeRedirectURL("menu"));
+        } catch (Exception e) {
+            req.setAttribute("message", e.getMessage());
+            req.getRequestDispatcher("error.jsp").forward(req, resp);
+        }
+    }
+
+    private void connect(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String databaseName = req.getParameter("dbname");
+        String userName = req.getParameter("username");
+        String password = req.getParameter("password");
+        try {
+            DatabaseManager dbManager = service.connect(databaseName, userName, password);
+            req.getSession().setAttribute("db_manager", dbManager);
+            resp.sendRedirect(resp.encodeRedirectURL("menu"));
+        } catch (Exception e) {
+            req.setAttribute("message", e.getMessage());
+            req.getRequestDispatcher("error.jsp").forward(req, resp);
         }
     }
 
