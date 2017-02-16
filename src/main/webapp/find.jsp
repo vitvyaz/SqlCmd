@@ -9,6 +9,8 @@
             &nbsp
             <a href="update?table=<%= request.getParameter("table") %>">update</a>
             &nbsp
+            <a href="clear?table=<%= request.getParameter("table") %>">clear</a>
+            &nbsp
             <a href="menu">menu</a><br>
             <hr>
 

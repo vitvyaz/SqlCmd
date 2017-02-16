@@ -72,6 +72,11 @@ public class MainServlet extends HttpServlet {
             req.setAttribute("columns", service.columns(dbManager, tableName));
             req.getRequestDispatcher("update.jsp").forward(req, resp);
 
+        } else if (action.startsWith("/clear")) {
+            String tableName = req.getParameter("table");
+            req.getSession().setAttribute("table", tableName);
+            req.getRequestDispatcher("clear.jsp").forward(req, resp);
+
         } else {
             req.getRequestDispatcher("error.jsp").forward(req, resp);
         }
@@ -92,7 +97,24 @@ public class MainServlet extends HttpServlet {
 
         } else if (action.equals("/update")) {
             update(req, resp);
+
+        } else if (action.equals("/clear")) {
+            clear(req, resp);
         }
+    }
+
+    private void clear(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        DatabaseManager dbManager = (DatabaseManager) req.getSession().getAttribute("db_manager");
+        String tableName = (String) req.getSession().getAttribute("table");
+        if (req.getParameter("confirm").equals("yes")) {
+            try {
+                dbManager.clearTable(tableName);
+            } catch (Exception e) {
+                req.setAttribute("message", e.getMessage());
+                req.getRequestDispatcher("error.jsp").forward(req, resp);
+            }
+        }
+        resp.sendRedirect(resp.encodeRedirectURL("find?table=" + tableName));
     }
 
     private void update(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
