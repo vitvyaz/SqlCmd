@@ -77,6 +77,11 @@ public class MainServlet extends HttpServlet {
             req.getSession().setAttribute("table", tableName);
             req.getRequestDispatcher("clear.jsp").forward(req, resp);
 
+        } else if (action.startsWith("/drop")) {
+            String tableName = req.getParameter("table");
+            req.getSession().setAttribute("table", tableName);
+            req.getRequestDispatcher("drop.jsp").forward(req, resp);
+
         } else {
             req.getRequestDispatcher("error.jsp").forward(req, resp);
         }
@@ -100,6 +105,25 @@ public class MainServlet extends HttpServlet {
 
         } else if (action.equals("/clear")) {
             clear(req, resp);
+
+        } else if (action.equals("/drop")) {
+            drop(req, resp);
+        }
+    }
+
+    private void drop(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        DatabaseManager dbManager = (DatabaseManager) req.getSession().getAttribute("db_manager");
+        String tableName = (String) req.getSession().getAttribute("table");
+        if (req.getParameter("confirm").equals("yes")) {
+            try {
+                dbManager.dropTable(tableName);
+            } catch (Exception e) {
+                req.setAttribute("message", e.getMessage());
+                req.getRequestDispatcher("error.jsp").forward(req, resp);
+            }
+            resp.sendRedirect(resp.encodeRedirectURL("tables"));
+        } else {
+            resp.sendRedirect(resp.encodeRedirectURL("find?table=" + tableName));
         }
     }
 
