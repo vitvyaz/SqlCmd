@@ -20,7 +20,7 @@ public class ServiceImpl implements Service {
 
     @Override
     public DatabaseManager connect(String databaseName, String userName, String password) {
-        DatabaseManager dbManager = new JDBCPosgreManager();
+        DatabaseManager dbManager = new JDBCPosgreManager(); //TODO move to spring config
         dbManager.connect(databaseName, userName, password);
         return dbManager;
     }
