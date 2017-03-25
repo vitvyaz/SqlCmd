@@ -5,7 +5,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import ua.com.juja.vitvyaz.sqlcmd.Main;
 import ua.com.juja.vitvyaz.sqlcmd.model.DatabaseManager;
-import ua.com.juja.vitvyaz.sqlcmd.model.JDBCPosgreManager;
+import ua.com.juja.vitvyaz.sqlcmd.model.JDBCPostgreManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -31,7 +31,7 @@ public class IntegrationTest {
 
     @BeforeClass
     public static void init() {
-        DatabaseManager dbManager = new JDBCPosgreManager();
+        DatabaseManager dbManager = new JDBCPostgreManager();
         dbManager.connect(DB_NAME, DB_USER, DB_PASSWORD);
         dbManager.dropTable("test");
         tablesWithoutTableTest = dbManager.getTableNames();

@@ -1,5 +1,6 @@
 package ua.com.juja.vitvyaz.sqlcmd.model;
 
+import org.springframework.stereotype.Component;
 import ua.com.juja.vitvyaz.sqlcmd.controller.command.util.Configuration;
 
 import java.sql.*;
@@ -8,7 +9,8 @@ import java.util.*;
 /**
  * Created by Vitalii Viazovoi on 22.02.2016.
  */
-public class JDBCPosgreManager implements DatabaseManager {
+@Component
+public class JDBCPostgreManager implements DatabaseManager {
 
     private Connection connection;
 

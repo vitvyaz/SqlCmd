@@ -9,4 +9,8 @@
 
    <context:annotation-config/><context:component-scan base-package="ua.com.juja.vitvyaz.sqlcmd"/>
 
+   <bean id="service" class="ua.com.juja.vitvyaz.sqlcmd.service.ServiceImpl">
+      <lookup-method name="getManager" bean="JDBCPostgreManager"/>
+   </bean>
+
 </beans>

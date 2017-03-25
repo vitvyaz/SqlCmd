@@ -5,7 +5,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import ua.com.juja.vitvyaz.sqlcmd.controller.command.util.InputLine;
 import ua.com.juja.vitvyaz.sqlcmd.model.DatabaseManager;
-import ua.com.juja.vitvyaz.sqlcmd.model.JDBCPosgreManager;
+import ua.com.juja.vitvyaz.sqlcmd.model.JDBCPostgreManager;
 import ua.com.juja.vitvyaz.sqlcmd.view.View;
 
 import static org.junit.Assert.assertEquals;
@@ -49,7 +49,7 @@ public class HelpTest {
     public void testProcessCommandHelp() {
         //given
         Help command = new Help(view);
-        DatabaseManager dbManager = new JDBCPosgreManager();
+        DatabaseManager dbManager = new JDBCPostgreManager();
         Command[] commands = new Command[]{
                 command,
                 new Exit(view),

@@ -20,11 +20,11 @@ public class JDBCPosgreManagerTest {
     private final static String DB_PASSWORD = "postgres";
 
     private static Set<String> tablesWithoutTableTest = new HashSet<>();
-    private JDBCPosgreManager dbManager;
+    private JDBCPostgreManager dbManager;
 
     @BeforeClass
     public static void init() {
-        DatabaseManager dbManager = new JDBCPosgreManager();
+        DatabaseManager dbManager = new JDBCPostgreManager();
         dbManager.connect(DB_NAME, DB_USER, DB_PASSWORD);
         dbManager.dropTable("test");
         tablesWithoutTableTest = dbManager.getTableNames();
@@ -33,7 +33,7 @@ public class JDBCPosgreManagerTest {
 
     @Before
     public void setup() {
-        dbManager = new JDBCPosgreManager();
+        dbManager = new JDBCPostgreManager();
         dbManager.connect(DB_NAME, DB_USER, DB_PASSWORD);
     }
 

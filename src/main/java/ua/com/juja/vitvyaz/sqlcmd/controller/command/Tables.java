@@ -2,7 +2,6 @@ package ua.com.juja.vitvyaz.sqlcmd.controller.command;
 
 import ua.com.juja.vitvyaz.sqlcmd.controller.command.util.InputLine;
 import ua.com.juja.vitvyaz.sqlcmd.model.DatabaseManager;
-import ua.com.juja.vitvyaz.sqlcmd.model.JDBCPosgreManager;
 import ua.com.juja.vitvyaz.sqlcmd.view.View;
 
 /**

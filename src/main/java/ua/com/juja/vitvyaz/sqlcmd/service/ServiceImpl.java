@@ -3,7 +3,6 @@ package ua.com.juja.vitvyaz.sqlcmd.service;
 import org.springframework.stereotype.Component;
 import ua.com.juja.vitvyaz.sqlcmd.model.DataSet;
 import ua.com.juja.vitvyaz.sqlcmd.model.DatabaseManager;
-import ua.com.juja.vitvyaz.sqlcmd.model.JDBCPosgreManager;
 
 import java.util.*;
 
@@ -11,7 +10,7 @@ import java.util.*;
  * Created by Виталий on 27.08.2016.
  */
 @Component
-public class ServiceImpl implements Service {
+public abstract class ServiceImpl implements Service {
 
     @Override
     public List<String> commandsList() {
@@ -20,7 +19,7 @@ public class ServiceImpl implements Service {
 
     @Override
     public DatabaseManager connect(String databaseName, String userName, String password) {
-        DatabaseManager dbManager = new JDBCPosgreManager(); //TODO move to spring config
+        DatabaseManager dbManager = getManager();
         dbManager.connect(databaseName, userName, password);
         return dbManager;
     }
@@ -53,5 +52,5 @@ public class ServiceImpl implements Service {
         return new ArrayList<>(dbManager.getTableColumns(tableName));
     }
 
-
+    protected abstract DatabaseManager getManager();
 }
