@@ -1,5 +1,6 @@
 package ua.com.juja.vitvyaz.sqlcmd.model;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import ua.com.juja.vitvyaz.sqlcmd.controller.command.util.Configuration;
 
@@ -10,6 +11,7 @@ import java.util.*;
  * Created by Vitalii Viazovoi on 22.02.2016.
  */
 @Component
+@Scope("prototype")
 public class JDBCPostgreManager implements DatabaseManager {
 
     private Connection connection;
