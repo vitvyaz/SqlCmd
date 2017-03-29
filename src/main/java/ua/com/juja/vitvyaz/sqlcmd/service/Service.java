@@ -10,11 +10,11 @@ import java.util.Set;
 public interface Service {
     List<String> commandsList();
 
-    DatabaseManager connect(String databaseName, String userName, String password);
+    DatabaseManager connect(String databaseName, String userName, String password) throws ServiceException;
 
-    List<List<String>> find(DatabaseManager manager, String tableName);
+    List<List<String>> find(DatabaseManager manager, String tableName) throws ServiceException;
 
-    Set<String> tables(DatabaseManager manager);
+    Set<String> tables(DatabaseManager manager) throws ServiceException;
 
-    List<String> columns(DatabaseManager manager, String tableName);
+    List<String> columns(DatabaseManager manager, String tableName) throws ServiceException;
 }
