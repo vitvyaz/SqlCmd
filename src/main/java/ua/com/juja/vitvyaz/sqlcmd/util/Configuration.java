@@ -1,4 +1,4 @@
-package ua.com.juja.vitvyaz.sqlcmd.controller.command.util;
+package ua.com.juja.vitvyaz.sqlcmd.util;
 
 import java.io.File;
 import java.io.FileInputStream;

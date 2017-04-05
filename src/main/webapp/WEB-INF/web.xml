@@ -19,7 +19,7 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
 
     <servlet>
         <servlet-name>MainServlet</servlet-name>
-        <servlet-class>ua.com.juja.vitvyaz.sqlcmd.controller.web.MainServlet</servlet-class>
+        <servlet-class>ua.com.juja.vitvyaz.sqlcmd.web.MainServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

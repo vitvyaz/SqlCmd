@@ -2,7 +2,7 @@ package ua.com.juja.vitvyaz.sqlcmd.model;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import ua.com.juja.vitvyaz.sqlcmd.controller.command.util.Configuration;
+import ua.com.juja.vitvyaz.sqlcmd.util.Configuration;
 
 import java.sql.*;
 import java.util.*;
