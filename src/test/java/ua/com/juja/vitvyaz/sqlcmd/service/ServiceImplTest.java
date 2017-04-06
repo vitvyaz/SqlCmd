@@ -11,6 +11,7 @@ import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 /**
@@ -70,4 +71,94 @@ public class ServiceImplTest {
         }
     }
 
+    @Test
+    public void testConnect() throws ServiceException {
+        //given
+
+        //when
+        DatabaseManager expectedDbManager = serviceImpl.connect("database", "user", "password");
+
+        //then
+        assertEquals(expectedDbManager, dbManager);
+    }
+
+    @Test
+    public void testConnectException(){
+        //given
+        doThrow(new RuntimeException("exception's message")).when(dbManager).connect("database", "user", "password");
+
+        //when
+        try {
+        DatabaseManager expectedDbManager = serviceImpl.connect("database", "user", "password");
+            fail();
+        } catch (ServiceException e) {
+            assertEquals("Connection error: exception's message",e.getMessage());;
+        }
+
+        //then
+
+    }
+
+    @Test
+    public void testCommandList() {
+        //given
+        //when
+        List<String> commands = Arrays.asList("help", "connect", "tables", "create");
+        //then
+        assertEquals(serviceImpl.commandsList(), commands);
+    }
+
+    @Test
+    public void testTables() throws ServiceException {
+        //given
+        when(dbManager.getTableNames()).thenReturn(new LinkedHashSet(Arrays.asList("table1", "table2")));
+
+        //when
+        Set<String> tables = serviceImpl.tables(dbManager);
+        //then
+        assertEquals("[table1, table2]", tables.toString());
+    }
+
+    @Test
+    public void testTablesException() {
+        //given
+        when(dbManager.getTableNames()).thenThrow(new RuntimeException("error message"));
+        //when
+
+        //then
+        try {
+            serviceImpl.tables(dbManager);
+            fail();
+        } catch (ServiceException e) {
+            assertEquals("Command tables error: error message",e.getMessage());
+        }
+    }
+
+    @Test
+    public void testColumns() throws ServiceException {
+        //given
+        when(dbManager.getTableColumns("users"))
+                .thenReturn(new LinkedHashSet(Arrays.asList("id", "name", "password")));
+
+        //when
+        List<String> columns = serviceImpl.columns(dbManager, "users");
+
+        //then
+        assertEquals("[id, name, password]", columns.toString());
+    }
+
+    @Test
+    public void testColumnsException() {
+        //given
+        when(dbManager.getTableColumns("users")).thenThrow(new RuntimeException("error message"));
+        //when
+
+        //then
+        try {
+            serviceImpl.columns(dbManager, "users");
+            fail();
+        } catch (ServiceException e) {
+            assertEquals("Command columns error: error message",e.getMessage());
+        }
+    }
 }
