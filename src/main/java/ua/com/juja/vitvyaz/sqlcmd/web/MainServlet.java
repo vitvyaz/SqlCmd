@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -22,94 +23,102 @@ public class MainServlet extends HttpServlet {
 
     @Autowired
     private Service service;
+    private List<Action> actions;
 
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
+
+        actions = new LinkedList<>();
+        actions.add(new ConnectAction());
+
         SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
                 config.getServletContext());
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String action = getAction(req);
+        Action action = getAction(req);
+        action.get(req, resp);
 
-        if (action.startsWith("/connect")) {
-            req.getRequestDispatcher("connect.jsp").forward(req, resp);
-            return;
-        }
-
-        DatabaseManager dbManager = (DatabaseManager) req.getSession().getAttribute("db_manager");
-
-        if (dbManager == null) {
-            resp.sendRedirect(resp.encodeRedirectURL("connect"));
-            return;
-        }
-
-        if (action.equals("/menu") || action.equals("/")) {
-            req.setAttribute("items", service.commandsList());
-            req.getRequestDispatcher("menu.jsp").forward(req, resp);
-
-        } else if (action.startsWith("/help")) {
-            req.getRequestDispatcher("help.jsp").forward(req, resp);
-
-        } else if (action.startsWith("/find")) {
-            String tableName = req.getParameter("table");
-            try {
-                req.setAttribute("data", service.find(dbManager, tableName));
-                req.getRequestDispatcher("find.jsp").forward(req, resp);
-            } catch (ServiceException e) {
-                error(req, resp, e);
-            }
-
-        } else if (action.startsWith("/tables")) {
-            try {
-                req.setAttribute("tables", service.tables(dbManager));
-                req.getRequestDispatcher("tables.jsp").forward(req, resp);
-            } catch (ServiceException e) {
-                error(req, resp, e);
-            }
-
-        } else if (action.startsWith("/create")) {
-            req.getRequestDispatcher("create.jsp").forward(req, resp);
-
-        } else if (action.startsWith("/insert")) {
-            try {
-                String tableName = req.getParameter("table");
-                req.getSession().setAttribute("table", tableName);
-                req.setAttribute("columns", service.columns(dbManager, tableName));
-                req.getRequestDispatcher("insert.jsp").forward(req, resp);
-            } catch (ServiceException e) {
-                error(req, resp, e);
-            }
-
-        } else if (action.startsWith("/update")) {
-            try {
-                String tableName = req.getParameter("table");
-                req.getSession().setAttribute("table", tableName);
-                req.setAttribute("columns", service.columns(dbManager, tableName));
-                req.getRequestDispatcher("update.jsp").forward(req, resp);
-            } catch (ServiceException e) {
-                error(req, resp, e);
-            }
-
-        } else if (action.startsWith("/clear")) {
-            String tableName = req.getParameter("table");
-            req.getSession().setAttribute("table", tableName);
-            req.getRequestDispatcher("clear.jsp").forward(req, resp);
-
-        } else if (action.startsWith("/drop")) {
-            String tableName = req.getParameter("table");
-            req.getSession().setAttribute("table", tableName);
-            req.getRequestDispatcher("drop.jsp").forward(req, resp);
-
-        } else {
-            req.getRequestDispatcher("error.jsp").forward(req, resp);
-        }
+//        String action = getActionName(req);
+//
+//        if (action.startsWith("/connect")) {
+//            req.getRequestDispatcher("connect.jsp").forward(req, resp);
+//            return;
+//        }
+//
+//        DatabaseManager dbManager = (DatabaseManager) req.getSession().getAttribute("db_manager");
+//
+//        if (dbManager == null) {
+//            resp.sendRedirect(resp.encodeRedirectURL("connect"));
+//            return;
+//        }
+//
+//        if (action.equals("/menu") || action.equals("/")) {
+//            req.setAttribute("items", service.commandsList());
+//            req.getRequestDispatcher("menu.jsp").forward(req, resp);
+//
+//        } else if (action.startsWith("/help")) {
+//            req.getRequestDispatcher("help.jsp").forward(req, resp);
+//
+//        } else if (action.startsWith("/find")) {
+//            String tableName = req.getParameter("table");
+//            try {
+//                req.setAttribute("data", service.find(dbManager, tableName));
+//                req.getRequestDispatcher("find.jsp").forward(req, resp);
+//            } catch (ServiceException e) {
+//                error(req, resp, e);
+//            }
+//
+//        } else if (action.startsWith("/tables")) {
+//            try {
+//                req.setAttribute("tables", service.tables(dbManager));
+//                req.getRequestDispatcher("tables.jsp").forward(req, resp);
+//            } catch (ServiceException e) {
+//                error(req, resp, e);
+//            }
+//
+//        } else if (action.startsWith("/create")) {
+//            req.getRequestDispatcher("create.jsp").forward(req, resp);
+//
+//        } else if (action.startsWith("/insert")) {
+//            try {
+//                String tableName = req.getParameter("table");
+//                req.getSession().setAttribute("table", tableName);
+//                req.setAttribute("columns", service.columns(dbManager, tableName));
+//                req.getRequestDispatcher("insert.jsp").forward(req, resp);
+//            } catch (ServiceException e) {
+//                error(req, resp, e);
+//            }
+//
+//        } else if (action.startsWith("/update")) {
+//            try {
+//                String tableName = req.getParameter("table");
+//                req.getSession().setAttribute("table", tableName);
+//                req.setAttribute("columns", service.columns(dbManager, tableName));
+//                req.getRequestDispatcher("update.jsp").forward(req, resp);
+//            } catch (ServiceException e) {
+//                error(req, resp, e);
+//            }
+//
+//        } else if (action.startsWith("/clear")) {
+//            String tableName = req.getParameter("table");
+//            req.getSession().setAttribute("table", tableName);
+//            req.getRequestDispatcher("clear.jsp").forward(req, resp);
+//
+//        } else if (action.startsWith("/drop")) {
+//            String tableName = req.getParameter("table");
+//            req.getSession().setAttribute("table", tableName);
+//            req.getRequestDispatcher("drop.jsp").forward(req, resp);
+//
+//        } else {
+//            req.getRequestDispatcher("error.jsp").forward(req, resp);
+//        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String action = getAction(req);
+        String action = getActionName(req);
 
         if (action.equals("/connect")) {
             connect(req, resp);
@@ -158,7 +167,7 @@ public class MainServlet extends HttpServlet {
         }
         resp.sendRedirect(resp.encodeRedirectURL("find?table=" + tableName));
     }
-//TODO may be should to remove dbManager.
+
     private void update(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         DatabaseManager dbManager = (DatabaseManager) req.getSession().getAttribute("db_manager");
         String tableName = (String) req.getSession().getAttribute("table");
@@ -230,8 +239,18 @@ public class MainServlet extends HttpServlet {
 
     }
 
-    private String getAction(HttpServletRequest req) {
+    private String getActionName(HttpServletRequest req) {
         String requestURI = req.getRequestURI();
         return requestURI.substring(req.getContextPath().length(), requestURI.length());
+    }
+
+    private Action getAction(HttpServletRequest req) {
+        String url = getActionName(req);
+        for(Action action : actions) {
+            if(action.canProcess(url)) {
+                return action;
+            }
+        }
+        return new NullAction();
     }
 }
