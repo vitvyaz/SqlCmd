@@ -13,5 +13,5 @@ public interface Action {
     boolean canProcess(String url);
 
     void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException;
-    void post(HttpServletRequest req, HttpServletResponse resp);
+    void post(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException;
 }

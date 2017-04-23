@@ -1,6 +1,5 @@
 package ua.com.juja.vitvyaz.sqlcmd.web;
 
-import ua.com.juja.vitvyaz.sqlcmd.model.DatabaseManager;
 import ua.com.juja.vitvyaz.sqlcmd.service.Service;
 
 import javax.servlet.ServletException;
@@ -11,30 +10,27 @@ import java.io.IOException;
 /**
  * @author Vitalii Viazovoi
  */
-public class ConnectAction extends AbstractAction {
+public class CreateAction extends AbstractAction {
 
-    public ConnectAction(Service service) {
+    public CreateAction(Service service) {
         super(service);
     }
 
     @Override
     public boolean canProcess(String url) {
-        return url.startsWith("/connect");
+        return url.startsWith("/create");
     }
 
     @Override
     public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("connect.jsp").forward(req, resp);
+        req.getRequestDispatcher("create.jsp").forward(req, resp);
     }
 
     @Override
     public void post(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String databaseName = req.getParameter("dbname");
-        String userName = req.getParameter("username");
-        String password = req.getParameter("password");
         try {
-            DatabaseManager dbManager = service.connect(databaseName, userName, password);
-            req.getSession().setAttribute("db_manager", dbManager);
+            String query = req.getParameter("query");
+            getManager(req, resp).createTable(query);
             resp.sendRedirect(resp.encodeRedirectURL("menu"));
         } catch (Exception e) {
             error(req, resp, e);
